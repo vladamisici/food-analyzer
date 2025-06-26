@@ -1,0 +1,607 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		172025B82E0DCC12007757AF /* EnhancedGoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025B72E0DCC12007757AF /* EnhancedGoalsView.swift */; };
+		172025BA2E0DCC1B007757AF /* EnhancedHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025B92E0DCC1B007757AF /* EnhancedHistoryView.swift */; };
+		172025BC2E0DCC21007757AF /* AchievementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025BB2E0DCC21007757AF /* AchievementsView.swift */; };
+		172025C52E0DCD00007757AF /* HistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025C42E0DCD00007757AF /* HistoryViewModel.swift */; };
+		172025C62E0DCD00007757AF /* GoalsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025C32E0DCD00007757AF /* GoalsViewModel.swift */; };
+		172025D02E0DCF88007757AF /* GoalsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025CF2E0DCF88007757AF /* GoalsRepository.swift */; };
+		172025D22E0DCF8D007757AF /* HistoryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025D12E0DCF8D007757AF /* HistoryRepository.swift */; };
+		172025D42E0DD14E007757AF /* GoalEditingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025D32E0DD14E007757AF /* GoalEditingView.swift */; };
+		172025D62E0DD160007757AF /* ProfileSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025D52E0DD160007757AF /* ProfileSetupView.swift */; };
+		172025ED2E0DD172007757AF /* ProgressRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025DD2E0DD172007757AF /* ProgressRing.swift */; };
+		172025EE2E0DD172007757AF /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025EA2E0DD172007757AF /* RegisterView.swift */; };
+		172025EF2E0DD172007757AF /* FoodAnalysisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025E12E0DD172007757AF /* FoodAnalysisView.swift */; };
+		172025F12E0DD172007757AF /* AchievementCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025D82E0DD172007757AF /* AchievementCard.swift */; };
+		172025F22E0DD172007757AF /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025EB2E0DD172007757AF /* ResultsView.swift */; };
+		172025F32E0DD172007757AF /* AchievementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025D72E0DD172007757AF /* AchievementsView.swift */; };
+		172025F42E0DD172007757AF /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025DA2E0DD172007757AF /* CustomTextField.swift */; };
+		172025F52E0DD172007757AF /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025E32E0DD172007757AF /* LoginView.swift */; };
+		172025F62E0DD172007757AF /* NutritionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025DB2E0DD172007757AF /* NutritionCard.swift */; };
+		172025F72E0DD172007757AF /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025D92E0DD172007757AF /* ChartView.swift */; };
+		172025F82E0DD172007757AF /* RecommendationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025E92E0DD172007757AF /* RecommendationsView.swift */; };
+		172025F92E0DD172007757AF /* EnhancedGoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025DF2E0DD172007757AF /* EnhancedGoalsView.swift */; };
+		172025FA2E0DD172007757AF /* EnhancedHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025E02E0DD172007757AF /* EnhancedHistoryView.swift */; };
+		172025FC2E0DD172007757AF /* GoalEditingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025E22E0DD172007757AF /* GoalEditingView.swift */; };
+		172025FD2E0DD172007757AF /* PhotoPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025E72E0DD172007757AF /* PhotoPickerView.swift */; };
+		172025FF2E0DD172007757AF /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025DC2E0DD172007757AF /* PrimaryButton.swift */; };
+		172026002E0DD172007757AF /* ProfileSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025E82E0DD172007757AF /* ProfileSetupView.swift */; };
+		A12345671000000100000001 /* FoodAnalyzerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12345661000000100000001 /* FoodAnalyzerApp.swift */; };
+		A12345691000000100000001 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12345681000000100000001 /* ContentView.swift */; };
+		A123456B1000000200000001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A123456A1000000200000001 /* Assets.xcassets */; };
+		A123456E1000000200000001 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A123456D1000000200000001 /* Preview Assets.xcassets */; };
+		A12345901000000400000001 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12345891000000400000001 /* Colors.swift */; };
+		A12345921000000400000001 /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12345911000000400000001 /* Typography.swift */; };
+		A12345941000000400000001 /* Spacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12345931000000400000001 /* Spacing.swift */; };
+		A12345961000000400000001 /* Result+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12345951000000400000001 /* Result+Extensions.swift */; };
+		A12345981000000400000001 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12345971000000400000001 /* KeychainManager.swift */; };
+		A12346001000000400000001 /* AuthRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12345991000000400000001 /* AuthRepository.swift */; };
+		A12346021000000400000001 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12346011000000400000001 /* Models.swift */; };
+		A12346041000000400000001 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12346031000000400000001 /* APIService.swift */; };
+		A12346061000000400000001 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12346051000000400000001 /* Config.swift */; };
+		A12346081000000400000001 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12346071000000400000001 /* AuthViewModel.swift */; };
+		A12346101000000400000001 /* FoodAnalysisViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12346091000000400000001 /* FoodAnalysisViewModel.swift */; };
+		A12346181000000400000001 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12346171000000400000001 /* LoginView.swift */; };
+		A12346201000000400000001 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12346191000000400000001 /* RegisterView.swift */; };
+		A12346221000000400000001 /* FoodAnalysisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12346211000000400000001 /* FoodAnalysisView.swift */; };
+		A12346241000000400000001 /* PhotoPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12346231000000400000001 /* PhotoPickerView.swift */; };
+		A12346261000000400000001 /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12346251000000400000001 /* ResultsView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		172025B72E0DCC12007757AF /* EnhancedGoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnhancedGoalsView.swift; sourceTree = "<group>"; };
+		172025B92E0DCC1B007757AF /* EnhancedHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnhancedHistoryView.swift; sourceTree = "<group>"; };
+		172025BB2E0DCC21007757AF /* AchievementsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementsView.swift; sourceTree = "<group>"; };
+		172025C32E0DCD00007757AF /* GoalsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsViewModel.swift; sourceTree = "<group>"; };
+		172025C42E0DCD00007757AF /* HistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewModel.swift; sourceTree = "<group>"; };
+		172025CF2E0DCF88007757AF /* GoalsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsRepository.swift; sourceTree = "<group>"; };
+		172025D12E0DCF8D007757AF /* HistoryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryRepository.swift; sourceTree = "<group>"; };
+		172025D32E0DD14E007757AF /* GoalEditingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalEditingView.swift; sourceTree = "<group>"; };
+		172025D52E0DD160007757AF /* ProfileSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetupView.swift; sourceTree = "<group>"; };
+		172025D72E0DD172007757AF /* AchievementsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementsView.swift; sourceTree = "<group>"; };
+		172025D82E0DD172007757AF /* AchievementCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementCard.swift; sourceTree = "<group>"; };
+		172025D92E0DD172007757AF /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
+		172025DA2E0DD172007757AF /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
+		172025DB2E0DD172007757AF /* NutritionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionCard.swift; sourceTree = "<group>"; };
+		172025DC2E0DD172007757AF /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
+		172025DD2E0DD172007757AF /* ProgressRing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressRing.swift; sourceTree = "<group>"; };
+		172025DF2E0DD172007757AF /* EnhancedGoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnhancedGoalsView.swift; sourceTree = "<group>"; };
+		172025E02E0DD172007757AF /* EnhancedHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnhancedHistoryView.swift; sourceTree = "<group>"; };
+		172025E12E0DD172007757AF /* FoodAnalysisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodAnalysisView.swift; sourceTree = "<group>"; };
+		172025E22E0DD172007757AF /* GoalEditingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalEditingView.swift; sourceTree = "<group>"; };
+		172025E32E0DD172007757AF /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		172025E72E0DD172007757AF /* PhotoPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerView.swift; sourceTree = "<group>"; };
+		172025E82E0DD172007757AF /* ProfileSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetupView.swift; sourceTree = "<group>"; };
+		172025E92E0DD172007757AF /* RecommendationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendationsView.swift; sourceTree = "<group>"; };
+		172025EA2E0DD172007757AF /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
+		172025EB2E0DD172007757AF /* ResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsView.swift; sourceTree = "<group>"; };
+		A12345631000000100000001 /* FoodAnalyzer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FoodAnalyzer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A12345661000000100000001 /* FoodAnalyzerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodAnalyzerApp.swift; sourceTree = "<group>"; };
+		A12345681000000100000001 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A123456A1000000200000001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A123456D1000000200000001 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		A12345891000000400000001 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		A12345911000000400000001 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
+		A12345931000000400000001 /* Spacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spacing.swift; sourceTree = "<group>"; };
+		A12345951000000400000001 /* Result+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Result+Extensions.swift"; sourceTree = "<group>"; };
+		A12345971000000400000001 /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
+		A12345991000000400000001 /* AuthRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthRepository.swift; sourceTree = "<group>"; };
+		A12346011000000400000001 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		A12346031000000400000001 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		A12346051000000400000001 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		A12346071000000400000001 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		A12346091000000400000001 /* FoodAnalysisViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodAnalysisViewModel.swift; sourceTree = "<group>"; };
+		A12346171000000400000001 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		A12346191000000400000001 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
+		A12346211000000400000001 /* FoodAnalysisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodAnalysisView.swift; sourceTree = "<group>"; };
+		A12346231000000400000001 /* PhotoPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerView.swift; sourceTree = "<group>"; };
+		A12346251000000400000001 /* ResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A12345601000000100000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		172025C72E0DCD0D007757AF /* Coordinators */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Coordinators;
+			sourceTree = "<group>";
+		};
+		172025DE2E0DD172007757AF /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				172025D82E0DD172007757AF /* AchievementCard.swift */,
+				172025D92E0DD172007757AF /* ChartView.swift */,
+				172025DA2E0DD172007757AF /* CustomTextField.swift */,
+				172025DB2E0DD172007757AF /* NutritionCard.swift */,
+				172025DC2E0DD172007757AF /* PrimaryButton.swift */,
+				172025DD2E0DD172007757AF /* ProgressRing.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		172025EC2E0DD172007757AF /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		A123455A1000000100000001 = {
+			isa = PBXGroup;
+			children = (
+				A12345651000000100000001 /* FoodAnalyzer */,
+				A12345641000000100000001 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A12345641000000100000001 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A12345631000000100000001 /* FoodAnalyzer.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A12345651000000100000001 /* FoodAnalyzer */ = {
+			isa = PBXGroup;
+			children = (
+				A12345661000000100000001 /* FoodAnalyzerApp.swift */,
+				A12345681000000100000001 /* ContentView.swift */,
+				A12346271000000500000001 /* DesignSystem */,
+				A12346281000000500000001 /* Core */,
+				A12346291000000500000001 /* Utilities */,
+				A12346301000000500000001 /* Repository */,
+				A12346311000000500000001 /* Services */,
+				A12346321000000500000001 /* Models */,
+				A12346331000000500000001 /* ViewModels */,
+				A12346341000000500000001 /* Views */,
+				A123456A1000000200000001 /* Assets.xcassets */,
+				A123456C1000000200000001 /* Preview Content */,
+			);
+			path = FoodAnalyzer;
+			sourceTree = "<group>";
+		};
+		A123456C1000000200000001 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				A123456D1000000200000001 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		A12346271000000500000001 /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				A12345891000000400000001 /* Colors.swift */,
+				A12345911000000400000001 /* Typography.swift */,
+				A12345931000000400000001 /* Spacing.swift */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		A12346281000000500000001 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				A12345951000000400000001 /* Result+Extensions.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		A12346291000000500000001 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				A12345971000000400000001 /* KeychainManager.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		A12346301000000500000001 /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				172025D12E0DCF8D007757AF /* HistoryRepository.swift */,
+				172025CF2E0DCF88007757AF /* GoalsRepository.swift */,
+				A12345991000000400000001 /* AuthRepository.swift */,
+			);
+			path = Repository;
+			sourceTree = "<group>";
+		};
+		A12346311000000500000001 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A12346031000000400000001 /* APIService.swift */,
+				A12346051000000400000001 /* Config.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A12346321000000500000001 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A12346011000000400000001 /* Models.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A12346331000000500000001 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				172025C72E0DCD0D007757AF /* Coordinators */,
+				172025C32E0DCD00007757AF /* GoalsViewModel.swift */,
+				172025C42E0DCD00007757AF /* HistoryViewModel.swift */,
+				A12346071000000400000001 /* AuthViewModel.swift */,
+				A12346091000000400000001 /* FoodAnalysisViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		A12346341000000500000001 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A12346171000000400000001 /* LoginView.swift */,
+				A12346191000000400000001 /* RegisterView.swift */,
+				172025D32E0DD14E007757AF /* GoalEditingView.swift */,
+				172025D52E0DD160007757AF /* ProfileSetupView.swift */,
+				172025B92E0DCC1B007757AF /* EnhancedHistoryView.swift */,
+				172025B72E0DCC12007757AF /* EnhancedGoalsView.swift */,
+				172025BB2E0DCC21007757AF /* AchievementsView.swift */,
+				A12346211000000400000001 /* FoodAnalysisView.swift */,
+				A12346231000000400000001 /* PhotoPickerView.swift */,
+				A12346251000000400000001 /* ResultsView.swift */,
+				172025D72E0DD172007757AF /* AchievementsView.swift */,
+				172025DE2E0DD172007757AF /* Components */,
+				172025DF2E0DD172007757AF /* EnhancedGoalsView.swift */,
+				172025E02E0DD172007757AF /* EnhancedHistoryView.swift */,
+				172025E12E0DD172007757AF /* FoodAnalysisView.swift */,
+				172025E22E0DD172007757AF /* GoalEditingView.swift */,
+				172025E32E0DD172007757AF /* LoginView.swift */,
+				172025E72E0DD172007757AF /* PhotoPickerView.swift */,
+				172025E82E0DD172007757AF /* ProfileSetupView.swift */,
+				172025E92E0DD172007757AF /* RecommendationsView.swift */,
+				172025EA2E0DD172007757AF /* RegisterView.swift */,
+				172025EB2E0DD172007757AF /* ResultsView.swift */,
+				172025EC2E0DD172007757AF /* Screens */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A12345621000000100000001 /* FoodAnalyzer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A12345711000000200000001 /* Build configuration list for PBXNativeTarget "FoodAnalyzer" */;
+			buildPhases = (
+				A123455F1000000100000001 /* Sources */,
+				A12345601000000100000001 /* Frameworks */,
+				A12345611000000100000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FoodAnalyzer;
+			productName = FoodAnalyzer;
+			productReference = A12345631000000100000001 /* FoodAnalyzer.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A123455B1000000100000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					A12345621000000100000001 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = A123455E1000000100000001 /* Build configuration list for PBXProject "FoodAnalyzer" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A123455A1000000100000001;
+			productRefGroup = A12345641000000100000001 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A12345621000000100000001 /* FoodAnalyzer */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A12345611000000100000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A123456E1000000200000001 /* Preview Assets.xcassets in Resources */,
+				A123456B1000000200000001 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A123455F1000000100000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A12345671000000100000001 /* FoodAnalyzerApp.swift in Sources */,
+				A12345691000000100000001 /* ContentView.swift in Sources */,
+				A12345901000000400000001 /* Colors.swift in Sources */,
+				A12345921000000400000001 /* Typography.swift in Sources */,
+				A12345941000000400000001 /* Spacing.swift in Sources */,
+				172025D22E0DCF8D007757AF /* HistoryRepository.swift in Sources */,
+				A12345961000000400000001 /* Result+Extensions.swift in Sources */,
+				172025ED2E0DD172007757AF /* ProgressRing.swift in Sources */,
+				172025EE2E0DD172007757AF /* RegisterView.swift in Sources */,
+				172025EF2E0DD172007757AF /* FoodAnalysisView.swift in Sources */,
+				172025F12E0DD172007757AF /* AchievementCard.swift in Sources */,
+				172025F22E0DD172007757AF /* ResultsView.swift in Sources */,
+				172025F32E0DD172007757AF /* AchievementsView.swift in Sources */,
+				172025F42E0DD172007757AF /* CustomTextField.swift in Sources */,
+				172025F52E0DD172007757AF /* LoginView.swift in Sources */,
+				172025F62E0DD172007757AF /* NutritionCard.swift in Sources */,
+				172025F72E0DD172007757AF /* ChartView.swift in Sources */,
+				172025F82E0DD172007757AF /* RecommendationsView.swift in Sources */,
+				172025F92E0DD172007757AF /* EnhancedGoalsView.swift in Sources */,
+				172025FA2E0DD172007757AF /* EnhancedHistoryView.swift in Sources */,
+				172025FC2E0DD172007757AF /* GoalEditingView.swift in Sources */,
+				172025FD2E0DD172007757AF /* PhotoPickerView.swift in Sources */,
+				172025FF2E0DD172007757AF /* PrimaryButton.swift in Sources */,
+				172026002E0DD172007757AF /* ProfileSetupView.swift in Sources */,
+				A12345981000000400000001 /* KeychainManager.swift in Sources */,
+				A12346001000000400000001 /* AuthRepository.swift in Sources */,
+				A12346041000000400000001 /* APIService.swift in Sources */,
+				A12346061000000400000001 /* Config.swift in Sources */,
+				A12346021000000400000001 /* Models.swift in Sources */,
+				172025D02E0DCF88007757AF /* GoalsRepository.swift in Sources */,
+				172025D62E0DD160007757AF /* ProfileSetupView.swift in Sources */,
+				A12346081000000400000001 /* AuthViewModel.swift in Sources */,
+				A12346101000000400000001 /* FoodAnalysisViewModel.swift in Sources */,
+				172025D42E0DD14E007757AF /* GoalEditingView.swift in Sources */,
+				172025C52E0DCD00007757AF /* HistoryViewModel.swift in Sources */,
+				172025C62E0DCD00007757AF /* GoalsViewModel.swift in Sources */,
+				172025BC2E0DCC21007757AF /* AchievementsView.swift in Sources */,
+				172025BA2E0DCC1B007757AF /* EnhancedHistoryView.swift in Sources */,
+				A12346181000000400000001 /* LoginView.swift in Sources */,
+				172025B82E0DCC12007757AF /* EnhancedGoalsView.swift in Sources */,
+				A12346201000000400000001 /* RegisterView.swift in Sources */,
+				A12346221000000400000001 /* FoodAnalysisView.swift in Sources */,
+				A12346241000000400000001 /* PhotoPickerView.swift in Sources */,
+				A12346261000000400000001 /* ResultsView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A123456F1000000200000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A12345701000000200000001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A12345721000000200000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"FoodAnalyzer/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app needs access to your camera to take photos of food for analysis.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app needs access to your photo library to select food images for analysis.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.FoodAnalyzer;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A12345731000000200000001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"FoodAnalyzer/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app needs access to your camera to take photos of food for analysis.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app needs access to your photo library to select food images for analysis.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.FoodAnalyzer;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A123455E1000000100000001 /* Build configuration list for PBXProject "FoodAnalyzer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A123456F1000000200000001 /* Debug */,
+				A12345701000000200000001 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A12345711000000200000001 /* Build configuration list for PBXNativeTarget "FoodAnalyzer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A12345721000000200000001 /* Debug */,
+				A12345731000000200000001 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A123455B1000000100000001 /* Project object */;
+}
