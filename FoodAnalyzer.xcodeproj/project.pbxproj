@@ -17,22 +17,13 @@
 		172025D42E0DD14E007757AF /* GoalEditingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025D32E0DD14E007757AF /* GoalEditingView.swift */; };
 		172025D62E0DD160007757AF /* ProfileSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025D52E0DD160007757AF /* ProfileSetupView.swift */; };
 		172025ED2E0DD172007757AF /* ProgressRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025DD2E0DD172007757AF /* ProgressRing.swift */; };
-		172025EE2E0DD172007757AF /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025EA2E0DD172007757AF /* RegisterView.swift */; };
-		172025EF2E0DD172007757AF /* FoodAnalysisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025E12E0DD172007757AF /* FoodAnalysisView.swift */; };
 		172025F12E0DD172007757AF /* AchievementCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025D82E0DD172007757AF /* AchievementCard.swift */; };
-		172025F22E0DD172007757AF /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025EB2E0DD172007757AF /* ResultsView.swift */; };
 		172025F32E0DD172007757AF /* AchievementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025D72E0DD172007757AF /* AchievementsView.swift */; };
 		172025F42E0DD172007757AF /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025DA2E0DD172007757AF /* CustomTextField.swift */; };
-		172025F52E0DD172007757AF /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025E32E0DD172007757AF /* LoginView.swift */; };
 		172025F62E0DD172007757AF /* NutritionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025DB2E0DD172007757AF /* NutritionCard.swift */; };
 		172025F72E0DD172007757AF /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025D92E0DD172007757AF /* ChartView.swift */; };
 		172025F82E0DD172007757AF /* RecommendationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025E92E0DD172007757AF /* RecommendationsView.swift */; };
-		172025F92E0DD172007757AF /* EnhancedGoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025DF2E0DD172007757AF /* EnhancedGoalsView.swift */; };
-		172025FA2E0DD172007757AF /* EnhancedHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025E02E0DD172007757AF /* EnhancedHistoryView.swift */; };
-		172025FC2E0DD172007757AF /* GoalEditingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025E22E0DD172007757AF /* GoalEditingView.swift */; };
-		172025FD2E0DD172007757AF /* PhotoPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025E72E0DD172007757AF /* PhotoPickerView.swift */; };
 		172025FF2E0DD172007757AF /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025DC2E0DD172007757AF /* PrimaryButton.swift */; };
-		172026002E0DD172007757AF /* ProfileSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025E82E0DD172007757AF /* ProfileSetupView.swift */; };
 		A12345671000000100000001 /* FoodAnalyzerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12345661000000100000001 /* FoodAnalyzerApp.swift */; };
 		A12345691000000100000001 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12345681000000100000001 /* ContentView.swift */; };
 		A123456B1000000200000001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A123456A1000000200000001 /* Assets.xcassets */; };
@@ -72,16 +63,7 @@
 		172025DB2E0DD172007757AF /* NutritionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionCard.swift; sourceTree = "<group>"; };
 		172025DC2E0DD172007757AF /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
 		172025DD2E0DD172007757AF /* ProgressRing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressRing.swift; sourceTree = "<group>"; };
-		172025DF2E0DD172007757AF /* EnhancedGoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnhancedGoalsView.swift; sourceTree = "<group>"; };
-		172025E02E0DD172007757AF /* EnhancedHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnhancedHistoryView.swift; sourceTree = "<group>"; };
-		172025E12E0DD172007757AF /* FoodAnalysisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodAnalysisView.swift; sourceTree = "<group>"; };
-		172025E22E0DD172007757AF /* GoalEditingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalEditingView.swift; sourceTree = "<group>"; };
-		172025E32E0DD172007757AF /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
-		172025E72E0DD172007757AF /* PhotoPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerView.swift; sourceTree = "<group>"; };
-		172025E82E0DD172007757AF /* ProfileSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetupView.swift; sourceTree = "<group>"; };
 		172025E92E0DD172007757AF /* RecommendationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendationsView.swift; sourceTree = "<group>"; };
-		172025EA2E0DD172007757AF /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
-		172025EB2E0DD172007757AF /* ResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsView.swift; sourceTree = "<group>"; };
 		A12345631000000100000001 /* FoodAnalyzer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FoodAnalyzer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A12345661000000100000001 /* FoodAnalyzerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodAnalyzerApp.swift; sourceTree = "<group>"; };
 		A12345681000000100000001 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -134,13 +116,6 @@
 				172025DD2E0DD172007757AF /* ProgressRing.swift */,
 			);
 			path = Components;
-			sourceTree = "<group>";
-		};
-		172025EC2E0DD172007757AF /* Screens */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Screens;
 			sourceTree = "<group>";
 		};
 		A123455A1000000100000001 = {
@@ -254,6 +229,7 @@
 		A12346341000000500000001 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				172025DE2E0DD172007757AF /* Components */,
 				A12346171000000400000001 /* LoginView.swift */,
 				A12346191000000400000001 /* RegisterView.swift */,
 				172025D32E0DD14E007757AF /* GoalEditingView.swift */,
@@ -265,18 +241,7 @@
 				A12346231000000400000001 /* PhotoPickerView.swift */,
 				A12346251000000400000001 /* ResultsView.swift */,
 				172025D72E0DD172007757AF /* AchievementsView.swift */,
-				172025DE2E0DD172007757AF /* Components */,
-				172025DF2E0DD172007757AF /* EnhancedGoalsView.swift */,
-				172025E02E0DD172007757AF /* EnhancedHistoryView.swift */,
-				172025E12E0DD172007757AF /* FoodAnalysisView.swift */,
-				172025E22E0DD172007757AF /* GoalEditingView.swift */,
-				172025E32E0DD172007757AF /* LoginView.swift */,
-				172025E72E0DD172007757AF /* PhotoPickerView.swift */,
-				172025E82E0DD172007757AF /* ProfileSetupView.swift */,
 				172025E92E0DD172007757AF /* RecommendationsView.swift */,
-				172025EA2E0DD172007757AF /* RegisterView.swift */,
-				172025EB2E0DD172007757AF /* ResultsView.swift */,
-				172025EC2E0DD172007757AF /* Screens */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -359,22 +324,13 @@
 				172025D22E0DCF8D007757AF /* HistoryRepository.swift in Sources */,
 				A12345961000000400000001 /* Result+Extensions.swift in Sources */,
 				172025ED2E0DD172007757AF /* ProgressRing.swift in Sources */,
-				172025EE2E0DD172007757AF /* RegisterView.swift in Sources */,
-				172025EF2E0DD172007757AF /* FoodAnalysisView.swift in Sources */,
 				172025F12E0DD172007757AF /* AchievementCard.swift in Sources */,
-				172025F22E0DD172007757AF /* ResultsView.swift in Sources */,
 				172025F32E0DD172007757AF /* AchievementsView.swift in Sources */,
 				172025F42E0DD172007757AF /* CustomTextField.swift in Sources */,
-				172025F52E0DD172007757AF /* LoginView.swift in Sources */,
 				172025F62E0DD172007757AF /* NutritionCard.swift in Sources */,
 				172025F72E0DD172007757AF /* ChartView.swift in Sources */,
 				172025F82E0DD172007757AF /* RecommendationsView.swift in Sources */,
-				172025F92E0DD172007757AF /* EnhancedGoalsView.swift in Sources */,
-				172025FA2E0DD172007757AF /* EnhancedHistoryView.swift in Sources */,
-				172025FC2E0DD172007757AF /* GoalEditingView.swift in Sources */,
-				172025FD2E0DD172007757AF /* PhotoPickerView.swift in Sources */,
 				172025FF2E0DD172007757AF /* PrimaryButton.swift in Sources */,
-				172026002E0DD172007757AF /* ProfileSetupView.swift in Sources */,
 				A12345981000000400000001 /* KeychainManager.swift in Sources */,
 				A12346001000000400000001 /* AuthRepository.swift in Sources */,
 				A12346041000000400000001 /* APIService.swift in Sources */,
