@@ -41,9 +41,25 @@
 		A12346101000000400000001 /* FoodAnalysisViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12346091000000400000001 /* FoodAnalysisViewModel.swift */; };
 		A12346181000000400000001 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12346171000000400000001 /* LoginView.swift */; };
 		A12346201000000400000001 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12346191000000400000001 /* RegisterView.swift */; };
-		A12346221000000400000001 /* FoodAnalysisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12346211000000400000001 /* FoodAnalysisView.swift */; };
 		A12346241000000400000001 /* PhotoPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12346231000000400000001 /* PhotoPickerView.swift */; };
 		A12346261000000400000001 /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12346251000000400000001 /* ResultsView.swift */; };
+		C12345012E0DE000007757AF /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12345002E0DE000007757AF /* CoreDataManager.swift */; };
+		C12345032E0DE001007757AF /* FoodAnalysisEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12345022E0DE001007757AF /* FoodAnalysisEntity+CoreDataClass.swift */; };
+		C12345052E0DE002007757AF /* FoodAnalysisEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12345042E0DE002007757AF /* FoodAnalysisEntity+CoreDataProperties.swift */; };
+		C12345072E0DE003007757AF /* NutritionGoalEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12345062E0DE003007757AF /* NutritionGoalEntity+CoreDataClass.swift */; };
+		C12345092E0DE004007757AF /* NutritionGoalEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12345082E0DE004007757AF /* NutritionGoalEntity+CoreDataProperties.swift */; };
+		C123450B2E0DE005007757AF /* CoreDataHistoryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = C123450A2E0DE005007757AF /* CoreDataHistoryRepository.swift */; };
+		C123450D2E0DE006007757AF /* CoreDataGoalsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = C123450C2E0DE006007757AF /* CoreDataGoalsRepository.swift */; };
+		C123450F2E0DE007007757AF /* DependencyContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C123450E2E0DE007007757AF /* DependencyContainer.swift */; };
+		C12345112E0DE008007757AF /* FoodAnalyzer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C12345102E0DE008007757AF /* FoodAnalyzer.xcdatamodeld */; };
+		D12345012E0DE100007757AF /* AnimationModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12345002E0DE100007757AF /* AnimationModifiers.swift */; };
+		D12345032E0DE101007757AF /* CustomTransitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12345022E0DE101007757AF /* CustomTransitions.swift */; };
+		D12345052E0DE102007757AF /* AnimatedLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12345042E0DE102007757AF /* AnimatedLoadingView.swift */; };
+		D12345072E0DE103007757AF /* AnimatedNutritionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12345062E0DE103007757AF /* AnimatedNutritionCard.swift */; };
+		D12345092E0DE104007757AF /* SuccessAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12345082E0DE104007757AF /* SuccessAnimationView.swift */; };
+		D123450B2E0DE105007757AF /* EnhancedFoodAnalysisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D123450A2E0DE105007757AF /* EnhancedFoodAnalysisView.swift */; };
+		D123450D2E0DE106007757AF /* AnimatedTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D123450C2E0DE106007757AF /* AnimatedTabBar.swift */; };
+		D123450F2E0DE107007757AF /* AnimatedOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D123450E2E0DE107007757AF /* AnimatedOnboardingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -82,9 +98,25 @@
 		A12346091000000400000001 /* FoodAnalysisViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodAnalysisViewModel.swift; sourceTree = "<group>"; };
 		A12346171000000400000001 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		A12346191000000400000001 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
-		A12346211000000400000001 /* FoodAnalysisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodAnalysisView.swift; sourceTree = "<group>"; };
 		A12346231000000400000001 /* PhotoPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerView.swift; sourceTree = "<group>"; };
 		A12346251000000400000001 /* ResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsView.swift; sourceTree = "<group>"; };
+		C12345002E0DE000007757AF /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		C12345022E0DE001007757AF /* FoodAnalysisEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FoodAnalysisEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
+		C12345042E0DE002007757AF /* FoodAnalysisEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FoodAnalysisEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		C12345062E0DE003007757AF /* NutritionGoalEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NutritionGoalEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
+		C12345082E0DE004007757AF /* NutritionGoalEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NutritionGoalEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		C123450A2E0DE005007757AF /* CoreDataHistoryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataHistoryRepository.swift; sourceTree = "<group>"; };
+		C123450C2E0DE006007757AF /* CoreDataGoalsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataGoalsRepository.swift; sourceTree = "<group>"; };
+		C123450E2E0DE007007757AF /* DependencyContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyContainer.swift; sourceTree = "<group>"; };
+		C12345122E0DE009007757AF /* FoodAnalyzer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FoodAnalyzer.xcdatamodel; sourceTree = "<group>"; };
+		D12345002E0DE100007757AF /* AnimationModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationModifiers.swift; sourceTree = "<group>"; };
+		D12345022E0DE101007757AF /* CustomTransitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTransitions.swift; sourceTree = "<group>"; };
+		D12345042E0DE102007757AF /* AnimatedLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedLoadingView.swift; sourceTree = "<group>"; };
+		D12345062E0DE103007757AF /* AnimatedNutritionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedNutritionCard.swift; sourceTree = "<group>"; };
+		D12345082E0DE104007757AF /* SuccessAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessAnimationView.swift; sourceTree = "<group>"; };
+		D123450A2E0DE105007757AF /* EnhancedFoodAnalysisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnhancedFoodAnalysisView.swift; sourceTree = "<group>"; };
+		D123450C2E0DE106007757AF /* AnimatedTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedTabBar.swift; sourceTree = "<group>"; };
+		D123450E2E0DE107007757AF /* AnimatedOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedOnboardingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,13 +130,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		172025C72E0DCD0D007757AF /* Coordinators */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Coordinators;
-			sourceTree = "<group>";
-		};
 		172025DE2E0DD172007757AF /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -114,6 +139,12 @@
 				172025DB2E0DD172007757AF /* NutritionCard.swift */,
 				172025DC2E0DD172007757AF /* PrimaryButton.swift */,
 				172025DD2E0DD172007757AF /* ProgressRing.swift */,
+				D12345002E0DE100007757AF /* AnimationModifiers.swift */,
+				D12345022E0DE101007757AF /* CustomTransitions.swift */,
+				D12345042E0DE102007757AF /* AnimatedLoadingView.swift */,
+				D12345062E0DE103007757AF /* AnimatedNutritionCard.swift */,
+				D12345082E0DE104007757AF /* SuccessAnimationView.swift */,
+				D123450C2E0DE106007757AF /* AnimatedTabBar.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -139,8 +170,10 @@
 			children = (
 				A12345661000000100000001 /* FoodAnalyzerApp.swift */,
 				A12345681000000100000001 /* ContentView.swift */,
+				C123450E2E0DE007007757AF /* DependencyContainer.swift */,
 				A12346271000000500000001 /* DesignSystem */,
 				A12346281000000500000001 /* Core */,
+				C12345FF2E0DE000007757AF /* CoreData */,
 				A12346291000000500000001 /* Utilities */,
 				A12346301000000500000001 /* Repository */,
 				A12346311000000500000001 /* Services */,
@@ -193,6 +226,8 @@
 				172025D12E0DCF8D007757AF /* HistoryRepository.swift */,
 				172025CF2E0DCF88007757AF /* GoalsRepository.swift */,
 				A12345991000000400000001 /* AuthRepository.swift */,
+				C123450A2E0DE005007757AF /* CoreDataHistoryRepository.swift */,
+				C123450C2E0DE006007757AF /* CoreDataGoalsRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -217,7 +252,6 @@
 		A12346331000000500000001 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				172025C72E0DCD0D007757AF /* Coordinators */,
 				172025C32E0DCD00007757AF /* GoalsViewModel.swift */,
 				172025C42E0DCD00007757AF /* HistoryViewModel.swift */,
 				A12346071000000400000001 /* AuthViewModel.swift */,
@@ -237,13 +271,27 @@
 				172025B92E0DCC1B007757AF /* EnhancedHistoryView.swift */,
 				172025B72E0DCC12007757AF /* EnhancedGoalsView.swift */,
 				172025BB2E0DCC21007757AF /* AchievementsView.swift */,
-				A12346211000000400000001 /* FoodAnalysisView.swift */,
+				D123450A2E0DE105007757AF /* EnhancedFoodAnalysisView.swift */,
+				D123450E2E0DE107007757AF /* AnimatedOnboardingView.swift */,
 				A12346231000000400000001 /* PhotoPickerView.swift */,
 				A12346251000000400000001 /* ResultsView.swift */,
 				172025D72E0DD172007757AF /* AchievementsView.swift */,
 				172025E92E0DD172007757AF /* RecommendationsView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		C12345FF2E0DE000007757AF /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				C12345002E0DE000007757AF /* CoreDataManager.swift */,
+				C12345022E0DE001007757AF /* FoodAnalysisEntity+CoreDataClass.swift */,
+				C12345042E0DE002007757AF /* FoodAnalysisEntity+CoreDataProperties.swift */,
+				C12345062E0DE003007757AF /* NutritionGoalEntity+CoreDataClass.swift */,
+				C12345082E0DE004007757AF /* NutritionGoalEntity+CoreDataProperties.swift */,
+				C12345102E0DE008007757AF /* FoodAnalyzer.xcdatamodeld */,
+			);
+			path = CoreData;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -348,9 +396,25 @@
 				A12346181000000400000001 /* LoginView.swift in Sources */,
 				172025B82E0DCC12007757AF /* EnhancedGoalsView.swift in Sources */,
 				A12346201000000400000001 /* RegisterView.swift in Sources */,
-				A12346221000000400000001 /* FoodAnalysisView.swift in Sources */,
 				A12346241000000400000001 /* PhotoPickerView.swift in Sources */,
 				A12346261000000400000001 /* ResultsView.swift in Sources */,
+				C12345012E0DE000007757AF /* CoreDataManager.swift in Sources */,
+				C12345032E0DE001007757AF /* FoodAnalysisEntity+CoreDataClass.swift in Sources */,
+				C12345052E0DE002007757AF /* FoodAnalysisEntity+CoreDataProperties.swift in Sources */,
+				C12345072E0DE003007757AF /* NutritionGoalEntity+CoreDataClass.swift in Sources */,
+				C12345092E0DE004007757AF /* NutritionGoalEntity+CoreDataProperties.swift in Sources */,
+				C123450B2E0DE005007757AF /* CoreDataHistoryRepository.swift in Sources */,
+				C123450D2E0DE006007757AF /* CoreDataGoalsRepository.swift in Sources */,
+				C123450F2E0DE007007757AF /* DependencyContainer.swift in Sources */,
+				C12345112E0DE008007757AF /* FoodAnalyzer.xcdatamodeld in Sources */,
+				D12345012E0DE100007757AF /* AnimationModifiers.swift in Sources */,
+				D12345032E0DE101007757AF /* CustomTransitions.swift in Sources */,
+				D12345052E0DE102007757AF /* AnimatedLoadingView.swift in Sources */,
+				D12345072E0DE103007757AF /* AnimatedNutritionCard.swift in Sources */,
+				D12345092E0DE104007757AF /* SuccessAnimationView.swift in Sources */,
+				D123450B2E0DE105007757AF /* EnhancedFoodAnalysisView.swift in Sources */,
+				D123450D2E0DE106007757AF /* AnimatedTabBar.swift in Sources */,
+				D123450F2E0DE107007757AF /* AnimatedOnboardingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -558,6 +622,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		C12345102E0DE008007757AF /* FoodAnalyzer.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				C12345122E0DE009007757AF /* FoodAnalyzer.xcdatamodel */,
+			);
+			currentVersion = C12345122E0DE009007757AF /* FoodAnalyzer.xcdatamodel */;
+			path = FoodAnalyzer.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = A123455B1000000100000001 /* Project object */;
 }

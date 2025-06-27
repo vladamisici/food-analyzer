@@ -139,9 +139,9 @@ struct RecommendationsView: View {
     
     private func calorieExplanation(_ recommendations: GoalRecommendations) -> String {
         switch recommendations.goalType {
-        case .lose:
+        case .weightLoss:
             return "500 kcal deficit for healthy weight loss"
-        case .gain:
+        case .weightGain:
             return "500 kcal surplus for gradual weight gain"
         case .muscle:
             return "Optimized for muscle building"

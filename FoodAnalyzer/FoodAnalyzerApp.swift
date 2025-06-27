@@ -1,4 +1,5 @@
 import SwiftUI
+import Combine
 
 @main
 struct FoodAnalyzerApp: App {
@@ -11,6 +12,7 @@ struct FoodAnalyzerApp: App {
                 .environmentObject(appState.authViewModel)
                 .environmentObject(appState.foodAnalysisViewModel)
                 .preferredColorScheme(appState.colorScheme)
+                .environment(\.managedObjectContext, CoreDataManager.shared.viewContext)
                 .onAppear {
                     setupApp()
                 }
@@ -58,8 +60,28 @@ final class AppState: ObservableObject {
     @Published var showOnboarding = false
     
     // View Models
-    let authViewModel = AuthViewModel()
-    let foodAnalysisViewModel = FoodAnalysisViewModel()
+    let authViewModel: AuthViewModel
+    let foodAnalysisViewModel: FoodAnalysisViewModel
+    let historyViewModel: HistoryViewModel
+    let goalsViewModel: GoalsViewModel
+    
+    private var cancellables = Set<AnyCancellable>()
+    
+    init() {
+        let container = DependencyContainer.shared
+        
+        self.authViewModel = AuthViewModel(authRepository: container.authRepository)
+        self.historyViewModel = HistoryViewModel(historyRepository: container.historyRepository)
+        self.goalsViewModel = GoalsViewModel(goalsRepository: container.goalsRepository)
+        self.foodAnalysisViewModel = FoodAnalysisViewModel()
+        
+        // Setup user sync
+        authViewModel.$currentUser
+            .sink { [weak self] user in
+                container.setupUserForRepositories(user)
+            }
+            .store(in: &cancellables)
+    }
     
     // Settings
     @Published var hapticFeedbackEnabled = true

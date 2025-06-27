@@ -249,7 +249,10 @@ final class GoalsRepository: GoalsRepositoryProtocol {
             carbsGoal: max(carbsGoal, 50), // Minimum 50g carbs
             fiberGoal: 25.0,
             explanation: generateExplanation(for: userProfile.goal, calories: calorieGoal),
-            tips: generateTips(for: userProfile.goal)
+            tips: generateTips(for: userProfile.goal),
+            bmr: Int(bmr),
+            tdee: Int(tdee),
+            goalType: userProfile.goal
         )
         
         return .success(recommendations)
@@ -595,4 +598,15 @@ struct GoalRecommendations: Codable {
     let fiberGoal: Double
     let explanation: String
     let tips: [String]
+    
+    // Additional properties for RecommendationsView
+    let bmr: Int
+    let tdee: Int
+    let goalType: UserProfile.Goal
+    
+    // Computed properties for UI
+    var calories: Int { dailyCalorieGoal }
+    var protein: Double { proteinGoal }
+    var carbs: Double { carbsGoal }
+    var fat: Double { fatGoal }
 }

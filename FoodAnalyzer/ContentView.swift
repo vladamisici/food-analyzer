@@ -89,19 +89,19 @@ struct OnboardingView: View {
             title: "Analyze Your Food",
             subtitle: "Take a photo of any meal to get instant nutrition insights",
             imageName: "camera.macro",
-            color: Color.theme.primary
+            gradientColors: [Color.theme.primary]
         ),
         OnboardingPage(
             title: "Track Your Goals",
             subtitle: "Set personalized nutrition goals and track your progress",
             imageName: "target",
-            color: Color.theme.secondary
+            gradientColors: [Color.theme.secondary]
         ),
         OnboardingPage(
             title: "Get Insights",
             subtitle: "Receive personalized coaching tips and meal recommendations",
             imageName: "lightbulb.fill",
-            color: Color.theme.accent
+            gradientColors: [Color.theme.accent]
         )
     ]
     
@@ -169,12 +169,12 @@ struct OnboardingView: View {
             // Icon
             ZStack {
                 Circle()
-                    .fill(page.color.opacity(0.1))
+                    //.fill(page.color.opacity(0.1))
                     .frame(width: 160, height: 160)
                 
                 Image(systemName: page.imageName)
                     .font(.system(size: 60))
-                    .foregroundColor(page.color)
+                    //.foregroundColor(page.color)
             }
             
             // Text Content
@@ -192,14 +192,6 @@ struct OnboardingView: View {
             Spacer()
         }
     }
-}
-
-// MARK: - Onboarding Page Model
-struct OnboardingPage {
-    let title: String
-    let subtitle: String
-    let imageName: String
-    let color: Color
 }
 
 // MARK: - Profile View

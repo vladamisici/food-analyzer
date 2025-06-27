@@ -14,6 +14,7 @@ final class GoalsViewModel: ObservableObject {
     
     // Goal Setting
     @Published var isEditingGoals = false
+    @Published var editingGoals = EditableGoals()
     @Published var tempCalorieGoal: String = ""
     @Published var tempProteinGoal: String = ""
     @Published var tempFatGoal: String = ""
@@ -191,6 +192,39 @@ final class GoalsViewModel: ObservableObject {
         showSuccessMessage("Recommendations applied! 📊")
     }
     
+    func generateGoalRecommendations(profile: UserProfile) {
+        switch goalsRepository.generateGoalRecommendations(userProfile: profile) {
+        case .success(let recommendations):
+            goalRecommendations = recommendations
+            
+            // Pre-fill the temp goals with recommendations
+            tempCalorieGoal = String(recommendations.dailyCalorieGoal)
+            tempProteinGoal = String(Int(recommendations.proteinGoal))
+            tempFatGoal = String(Int(recommendations.fatGoal))
+            tempCarbsGoal = String(Int(recommendations.carbsGoal))
+            tempFiberGoal = String(Int(recommendations.fiberGoal))
+            
+            showGoalRecommendations = true
+            showSuccessMessage("Recommendations generated! 🎯")
+        case .failure(let error):
+            showError(error)
+        }
+    }
+    
+    func customizeRecommendations() {
+        guard let recommendations = goalRecommendations else { return }
+        
+        // Pre-fill temp goals with current recommendations
+        tempCalorieGoal = String(recommendations.dailyCalorieGoal)
+        tempProteinGoal = String(Int(recommendations.proteinGoal))
+        tempFatGoal = String(Int(recommendations.fatGoal))
+        tempCarbsGoal = String(Int(recommendations.carbsGoal))
+        tempFiberGoal = String(Int(recommendations.fiberGoal))
+        
+        showGoalRecommendations = false
+        isEditingGoals = true
+    }
+    
     func updateProgress(with analysis: FoodAnalysisResponse) {
         switch goalsRepository.updateProgress(for: Date(), analysis: analysis) {
         case .success:
@@ -234,20 +268,6 @@ final class GoalsViewModel: ObservableObject {
         case .failure(let error):
             showError(error)
         }
-    }
-    
-    func startEditingGoals() {
-        if let goals = currentGoals {
-            updateTempGoals(from: goals)
-        } else {
-            // Set default values
-            tempCalorieGoal = "2000"
-            tempProteinGoal = "150"
-            tempFatGoal = "67"
-            tempCarbsGoal = "250"
-            tempFiberGoal = "25"
-        }
-        isEditingGoals = true
     }
     
     func cancelEditingGoals() {
@@ -382,6 +402,40 @@ final class GoalsViewModel: ObservableObject {
         successMessage = nil
         showSuccessMessage = false
     }
+    
+    func saveEditingGoals() {
+        let goals = NutritionGoals(
+            dailyCalorieGoal: editingGoals.dailyCalorieGoal,
+            proteinGoal: editingGoals.proteinGoal,
+            fatGoal: editingGoals.fatGoal,
+            carbsGoal: editingGoals.carbsGoal,
+            fiberGoal: editingGoals.fiberGoal,
+            activityLevel: selectedActivityLevel,
+            goals: currentGoals?.goals ?? []
+        )
+        
+        switch goalsRepository.saveGoals(goals) {
+        case .success:
+            currentGoals = goals
+            isEditingGoals = false
+            showSuccessMessage("Goals updated successfully! 🎯")
+            loadProgress() // Refresh progress calculations
+        case .failure(let error):
+            showError(error)
+        }
+    }
+    
+    func startEditingGoals() {
+        if let currentGoals = currentGoals {
+            editingGoals.dailyCalorieGoal = currentGoals.dailyCalorieGoal
+            editingGoals.proteinGoal = currentGoals.proteinGoal
+            editingGoals.fatGoal = currentGoals.fatGoal
+            editingGoals.carbsGoal = currentGoals.carbsGoal
+            editingGoals.fiberGoal = currentGoals.fiberGoal
+            selectedActivityLevel = currentGoals.activityLevel
+        }
+        isEditingGoals = true
+    }
 }
 
 // MARK: - Supporting Types
@@ -397,4 +451,12 @@ enum ProgressPeriod: String, CaseIterable {
         case .monthly: return "calendar.badge.clock"
         }
     }
+}
+
+struct EditableGoals {
+    var dailyCalorieGoal: Int = 2000
+    var proteinGoal: Double = 150.0
+    var fatGoal: Double = 67.0
+    var carbsGoal: Double = 250.0
+    var fiberGoal: Double = 25.0
 }

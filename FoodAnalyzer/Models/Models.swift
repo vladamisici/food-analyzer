@@ -234,7 +234,7 @@ struct AnalysisHistory: Codable, Identifiable {
 
 // MARK: - Nutrition Goals Model
 struct NutritionGoals: Codable, Identifiable {
-    let id = UUID()
+    var id = UUID()
     var dailyCalorieGoal: Int
     var proteinGoal: Double
     var fatGoal: Double

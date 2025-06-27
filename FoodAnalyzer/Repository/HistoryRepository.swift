@@ -233,7 +233,7 @@ final class HistoryRepository: HistoryRepositoryProtocol {
 }
 
 // MARK: - Supporting Types
-enum DateRange {
+enum DateRange: Hashable, Equatable {
     case today
     case thisWeek
     case thisMonth
