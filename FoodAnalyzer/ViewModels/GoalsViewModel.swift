@@ -249,7 +249,7 @@ final class GoalsViewModel: ObservableObject {
         }
         
         // Load weekly progress
-        switch goalsRepository.getWeeklyProgress() {
+        switch goalsRepository.getWeeklyProgress(for: Date()) {
         case .success(let progress):
             weeklyProgress = progress
         case .failure(let error):

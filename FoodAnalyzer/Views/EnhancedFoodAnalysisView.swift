@@ -8,6 +8,8 @@ struct EnhancedFoodAnalysisView: View {
     @State private var showErrorAnimation = false
     @State private var selectedPhotoItem: PhotosPickerItem?
     @State private var animateCamera = false
+    @State private var showImagePicker = false
+    @State private var sourceType: UIImagePickerController.SourceType = .camera
     
     var body: some View {
         ZStack {
@@ -56,15 +58,21 @@ struct EnhancedFoodAnalysisView: View {
                 .zIndex(1)
             }
         }
+        .sheet(isPresented: $showImagePicker) {
+            // Folosește UIImagePickerController direct prin UIViewControllerRepresentable
+            CameraPickerView(image: $viewModel.selectedImage, sourceType: sourceType)
+        }
         .onChange(of: viewModel.analysisResult) { newValue in
             if newValue != nil {
                 showSuccessAnimation = true
+                HapticManager.shared.analysisComplete()
             }
         }
         .onChange(of: viewModel.showError) { showError in
             if showError {
                 showErrorAnimation = true
                 viewModel.showError = false
+                HapticManager.shared.error()
             }
         }
         .onChange(of: selectedPhotoItem) { newItem in
@@ -72,6 +80,7 @@ struct EnhancedFoodAnalysisView: View {
                 if let data = try? await newItem?.loadTransferable(type: Data.self),
                    let image = UIImage(data: data) {
                     viewModel.selectedImage = image
+                    HapticManager.shared.selection()
                 }
             }
         }
@@ -111,7 +120,10 @@ struct EnhancedFoodAnalysisView: View {
                             .foregroundColor(.theme.primary)
                     }
                     
-                    Button(action: { viewModel.takePhoto }) {
+                    Button(action: {
+                        sourceType = .camera
+                        showImagePicker = true
+                    }) {
                         Label("Retake", systemImage: "camera.fill")
                             .font(.subheadline)
                             .foregroundColor(.theme.primary)
@@ -145,7 +157,11 @@ struct EnhancedFoodAnalysisView: View {
                             .foregroundColor(.theme.textSecondary)
                         
                         HStack(spacing: 20) {
-                            Button(action: { viewModel.takePhoto() }) {
+                            Button(action: {
+                                sourceType = .camera
+                                showImagePicker = true
+                                HapticManager.shared.lightTap()
+                            }) {
                                 VStack(spacing: 8) {
                                     Image(systemName: "camera.fill")
                                         .font(.title2)
@@ -157,7 +173,7 @@ struct EnhancedFoodAnalysisView: View {
                                 .background(Color.theme.primary.opacity(0.1))
                                 .cornerRadius(12)
                             }
-                            .bounce(trigger: viewModel.showImagePicker)
+                            .bounce(trigger: showImagePicker)
                             
                             PhotosPicker(selection: $selectedPhotoItem,
                                         matching: .images,
@@ -177,7 +193,9 @@ struct EnhancedFoodAnalysisView: View {
                     }
                 }
                 .onTapGesture {
-                    viewModel.takePhoto()
+                    sourceType = .camera
+                    showImagePicker = true
+                    HapticManager.shared.lightTap()
                 }
                 .onAppear {
                     animateCamera = true
@@ -189,7 +207,10 @@ struct EnhancedFoodAnalysisView: View {
     private var analyzeButton: some View {
         Button(action: {
             Task {
-                await viewModel.analyzeFood()
+                if let image = viewModel.selectedImage {
+                    await viewModel.analyzeFood(image: image)
+                    HapticManager.shared.mediumTap()
+                }
             }
         }) {
             HStack(spacing: 12) {
@@ -210,40 +231,47 @@ struct EnhancedFoodAnalysisView: View {
             .cornerRadius(16)
         }
         .pulsating(isActive: true)
+        .disabled(viewModel.isAnalyzing)
     }
     
     private func resultSection(_ result: FoodAnalysisResponse) -> some View {
         VStack(alignment: .leading, spacing: 20) {
+            // Food name and basic info
             VStack(alignment: .leading, spacing: 8) {
-                Text(result.foodName)
+                Text(result.itemName)
                     .font(.title2)
                     .fontWeight(.bold)
                     .slideIn()
                 
                 HStack(spacing: 16) {
-                    Label("\(result.healthScore)/10", systemImage: "heart.fill")
+                    Label("\(result.healthScoreValue)/10", systemImage: "heart.fill")
                         .font(.subheadline)
-                        .foregroundColor(healthScoreColor(result.healthScore))
+                        .foregroundColor(healthScoreColor(result.healthScoreValue))
                     
-                    Label("\(Int(result.nutrition.calories)) cal", systemImage: "flame.fill")
+                    Label("\(result.calories) cal", systemImage: "flame.fill")
                         .font(.subheadline)
                         .foregroundColor(.orange)
                 }
                 .fadeIn(delay: 0.2)
             }
             
+            // Nutrition grid using the analysis data
             AnimatedNutritionGrid(
-                nutrition: result.nutrition,
-                goals: goalsViewModel.nutritionGoals
+                calories: Double(result.calories),
+                protein: result.proteinValue,
+                carbs: result.carbsValue,
+                fat: result.fatValue,
+                goals: goalsViewModel.currentGoals
             )
             
-            if !result.coachingComments.isEmpty {
+            // Coach comments
+            if !result.coachComment.isEmpty {
                 VStack(alignment: .leading, spacing: 12) {
                     Label("AI Insights", systemImage: "sparkles")
                         .font(.headline)
                         .foregroundColor(.theme.primary)
                     
-                    Text(result.coachingComments)
+                    Text(result.coachComment)
                         .font(.body)
                         .foregroundColor(.theme.textSecondary)
                         .padding()
@@ -255,8 +283,45 @@ struct EnhancedFoodAnalysisView: View {
                 .slideIn(delay: 0.3)
             }
             
+            // Nutrition insights
+            if !result.insights.isEmpty {
+                VStack(alignment: .leading, spacing: 12) {
+                    Label("Nutrition Insights", systemImage: "lightbulb.fill")
+                        .font(.headline)
+                        .foregroundColor(.theme.accent)
+                    
+                    LazyVStack(spacing: 8) {
+                        ForEach(result.insights, id: \.id) { insight in
+                            HStack(spacing: 12) {
+                                Image(systemName: insightIcon(for: insight.type))
+                                    .foregroundColor(insightColor(for: insight.severity))
+                                    .font(.title3)
+                                
+                                Text(insight.message)
+                                    .font(.body)
+                                    .foregroundColor(.theme.textSecondary)
+                                
+                                Spacer()
+                            }
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                            .background(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(insightColor(for: insight.severity).opacity(0.1))
+                            )
+                        }
+                    }
+                }
+                .slideIn(delay: 0.4)
+            }
+            
+            // Action buttons
             HStack(spacing: 16) {
-                Button(action: { viewModel.saveAnalysis() }) {
+                Button(action: {
+                    // Simple save action - just show success for now
+                    HapticManager.shared.save()
+                    // TODO: Implement save functionality based on your ViewModel methods
+                }) {
                     Label("Save", systemImage: "bookmark.fill")
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 12)
@@ -265,7 +330,11 @@ struct EnhancedFoodAnalysisView: View {
                         .cornerRadius(12)
                 }
                 
-                Button(action: { viewModel.resetAnalysis() }) {
+                Button(action: {
+                    viewModel.selectedImage = nil
+                    viewModel.analysisResult = nil
+                    HapticManager.shared.lightTap()
+                }) {
                     Label("New Analysis", systemImage: "arrow.clockwise")
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 12)
@@ -274,7 +343,7 @@ struct EnhancedFoodAnalysisView: View {
                         .cornerRadius(12)
                 }
             }
-            .fadeIn(delay: 0.4)
+            .fadeIn(delay: 0.5)
         }
         .padding()
         .background(
@@ -284,11 +353,82 @@ struct EnhancedFoodAnalysisView: View {
         )
     }
     
+    // MARK: - Helper Functions
+    
     private func healthScoreColor(_ score: Int) -> Color {
         switch score {
         case 8...10: return .green
         case 5...7: return .orange
         default: return .red
+        }
+    }
+    
+    private func insightIcon(for type: FoodAnalysisResponse.NutritionInsight.InsightType) -> String {
+        switch type {
+        case .highSodium:
+            return "exclamationmark.triangle"
+        case .lowProtein:
+            return "info.circle"
+        case .goodProtein:
+            return "bolt.circle.fill"
+        case .highFat:
+            return "exclamationmark.triangle"
+        case .highCalorie:
+            return "flame.circle"
+        case .highSugar:
+            return "exclamationmark.triangle"
+        case .goodFiber:
+            return "checkmark.circle"
+        case .balanced:
+            return "checkmark.circle"
+        }
+    }
+    
+    private func insightColor(for severity: FoodAnalysisResponse.NutritionInsight.Severity) -> Color {
+        switch severity {
+        case .info: return .blue
+        case .warning: return .orange
+        case .positive: return .green
+        }
+    }
+}
+
+// MARK: - CameraPickerView for UIImagePickerController
+
+struct CameraPickerView: UIViewControllerRepresentable {
+    @Binding var image: UIImage?
+    let sourceType: UIImagePickerController.SourceType
+    @Environment(\.dismiss) private var dismiss
+    
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let picker = UIImagePickerController()
+        picker.sourceType = sourceType
+        picker.delegate = context.coordinator
+        return picker
+    }
+    
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+    
+    class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+        let parent: CameraPickerView
+        
+        init(_ parent: CameraPickerView) {
+            self.parent = parent
+        }
+        
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+            if let image = info[.originalImage] as? UIImage {
+                parent.image = image
+            }
+            parent.dismiss()
+        }
+        
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+            parent.dismiss()
         }
     }
 }

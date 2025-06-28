@@ -8,152 +8,188 @@ struct ProfileSetupView: View {
     @State private var weight: String = ""
     @State private var height: String = ""
     @State private var selectedGender: UserProfile.Gender = .male
-    @State private var selectedActivityLevel: UserProfile.ActivityLevel = .moderately
-    @State private var selectedGoal: UserProfile.Goal = .maintenance
+    @State private var selectedActivityLevel: NutritionGoals.ActivityLevel = .moderately
+    @State private var selectedGoal: NutritionGoals.Goal.GoalType = .maintenance
     
-    // Manual arrays as backup if .allCases doesn't work
+    // Manual arrays as backup - Using correct types
     private let genderOptions: [UserProfile.Gender] = [.male, .female]
-    private let activityLevelOptions: [UserProfile.ActivityLevel] = [.sedentary, .lightly, .moderately, .very, .extremely]
-    private let goalOptions: [UserProfile.Goal] = [.weightLoss, .weightGain, .maintenance, .muscle, .endurance]
+    private let activityLevelOptions: [NutritionGoals.ActivityLevel] = [.sedentary, .lightly, .moderately, .very, .extremely]
+    private let goalOptions: [NutritionGoals.Goal.GoalType] = [.weightLoss, .weightGain, .maintenance, .muscle, .endurance]
     
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
                 // Header
-                VStack(spacing: 16) {
-                    Text("Profile Setup")
-                        .font(.title2.weight(.semibold))
-                        .foregroundColor(.primary)
-                    
-                    Text("Help us create personalized nutrition goals for you")
-                        .font(.body)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                }
+                headerSection
                 
                 // Basic Info
-                VStack(alignment: .leading, spacing: 20) {
-                    Text("Basic Information")
-                        .font(.headline)
-                        .foregroundColor(.primary)
-                    
-                    VStack(spacing: 16) {
-                        HStack {
-                            Text("Age")
-                                .font(.body)
-                                .frame(width: 80, alignment: .leading)
-                            
-                            TextField("25", text: $age)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .keyboardType(.numberPad)
-                        }
-                        
-                        HStack {
-                            Text("Weight")
-                                .font(.body)
-                                .frame(width: 80, alignment: .leading)
-                            
-                            TextField("70", text: $weight)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .keyboardType(.numberPad)
-                            
-                            Text("kg")
-                                .font(.body)
-                                .foregroundColor(.secondary)
-                        }
-                        
-                        HStack {
-                            Text("Height")
-                                .font(.body)
-                                .frame(width: 80, alignment: .leading)
-                            
-                            TextField("175", text: $height)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .keyboardType(.numberPad)
-                            
-                            Text("cm")
-                                .font(.body)
-                                .foregroundColor(.secondary)
-                        }
-                    }
-                }
+                basicInfoSection
                 
-                // Gender Selection - Using manual array
-                VStack(alignment: .leading, spacing: 16) {
-                    Text("Gender")
-                        .font(.headline)
-                        .foregroundColor(.primary)
-                    
-                    Picker("Gender", selection: $selectedGender) {
-                        ForEach(genderOptions, id: \.self) { gender in
-                            Text(gender.rawValue.capitalized).tag(gender)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                }
+                // Gender Selection
+                genderSection
                 
-                // Activity Level - Using manual array
-                VStack(alignment: .leading, spacing: 16) {
-                    Text("Activity Level")
-                        .font(.headline)
-                        .foregroundColor(.primary)
-                    
-                    VStack(spacing: 12) {
-                        ForEach(activityLevelOptions, id: \.self) { level in
-                            ActivityLevelCard(
-                                level: level,
-                                isSelected: selectedActivityLevel == level
-                            ) {
-                                selectedActivityLevel = level
-                            }
-                        }
-                    }
-                }
+                // Activity Level
+                activityLevelSection
                 
-                // Goal Selection - Using manual array
-                VStack(alignment: .leading, spacing: 16) {
-                    Text("Primary Goal")
-                        .font(.headline)
-                        .foregroundColor(.primary)
-                    
-                    VStack(spacing: 12) {
-                        ForEach(goalOptions, id: \.self) { goal in
-                            GoalCard(
-                                goal: goal,
-                                isSelected: selectedGoal == goal
-                            ) {
-                                selectedGoal = goal
-                            }
-                        }
-                    }
-                }
+                // Goal Selection
+                goalSection
                 
                 // Action Buttons
-                VStack(spacing: 16) {
-                    Button("Generate Recommendations") {
-                        generateRecommendations()
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(12)
-                    
-                    Button("Skip for Now") {
-                        dismiss()
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.gray.opacity(0.2))
-                    .foregroundColor(.primary)
-                    .cornerRadius(12)
-                }
+                actionButtonsSection
             }
             .padding()
         }
         .navigationTitle("Profile Setup")
         .navigationBarTitleDisplayMode(.inline)
     }
+    
+    // MARK: - View Sections
+    
+    private var headerSection: some View {
+        VStack(spacing: 16) {
+            Text("Profile Setup")
+                .font(.title2.weight(.semibold))
+                .foregroundColor(.primary)
+            
+            Text("Help us create personalized nutrition goals for you")
+                .font(.body)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+        }
+    }
+    
+    private var basicInfoSection: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            Text("Basic Information")
+                .font(.headline)
+                .foregroundColor(.primary)
+            
+            VStack(spacing: 16) {
+                HStack {
+                    Text("Age")
+                        .font(.body)
+                        .frame(width: 80, alignment: .leading)
+                    
+                    TextField("25", text: $age)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .keyboardType(.numberPad)
+                }
+                
+                HStack {
+                    Text("Weight")
+                        .font(.body)
+                        .frame(width: 80, alignment: .leading)
+                    
+                    TextField("70", text: $weight)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .keyboardType(.numberPad)
+                    
+                    Text("kg")
+                        .font(.body)
+                        .foregroundColor(.secondary)
+                }
+                
+                HStack {
+                    Text("Height")
+                        .font(.body)
+                        .frame(width: 80, alignment: .leading)
+                    
+                    TextField("175", text: $height)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .keyboardType(.numberPad)
+                    
+                    Text("cm")
+                        .font(.body)
+                        .foregroundColor(.secondary)
+                }
+            }
+        }
+    }
+    
+    private var genderSection: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Gender")
+                .font(.headline)
+                .foregroundColor(.primary)
+            
+            Picker("Gender", selection: $selectedGender) {
+                ForEach(genderOptions, id: \.self) { gender in
+                    Text(gender.displayName).tag(gender)
+                }
+            }
+            .pickerStyle(.segmented)
+        }
+    }
+    
+    private var activityLevelSection: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Activity Level")
+                .font(.headline)
+                .foregroundColor(.primary)
+            
+            VStack(spacing: 12) {
+                ForEach(activityLevelOptions, id: \.self) { level in
+                    ActivityLevelCard(
+                        level: level,
+                        isSelected: selectedActivityLevel == level
+                    ) {
+                        selectedActivityLevel = level
+                    }
+                }
+            }
+        }
+    }
+    
+    private var goalSection: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Primary Goal")
+                .font(.headline)
+                .foregroundColor(.primary)
+            
+            VStack(spacing: 12) {
+                ForEach(goalOptions, id: \.self) { goal in
+                    GoalCard(
+                        goal: goal,
+                        isSelected: selectedGoal == goal
+                    ) {
+                        selectedGoal = goal
+                    }
+                }
+            }
+        }
+    }
+    
+    private var actionButtonsSection: some View {
+        VStack(spacing: 16) {
+            Button("Generate Recommendations") {
+                generateRecommendations()
+            }
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(12)
+            .disabled(!isFormValid)
+            
+            Button("Skip for Now") {
+                dismiss()
+            }
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(Color.gray.opacity(0.2))
+            .foregroundColor(.primary)
+            .cornerRadius(12)
+        }
+    }
+    
+    // MARK: - Helper Properties
+    
+    private var isFormValid: Bool {
+        !age.isEmpty && !weight.isEmpty && !height.isEmpty &&
+        Int(age) != nil && Int(weight) != nil && Int(height) != nil
+    }
+    
+    // MARK: - Actions
     
     private func generateRecommendations() {
         guard let ageValue = Int(age),
@@ -168,7 +204,11 @@ struct ProfileSetupView: View {
             height: heightValue,
             gender: selectedGender,
             activityLevel: selectedActivityLevel,
-            goal: selectedGoal
+            goal: selectedGoal,
+            preferences: nil,
+            medicalConditions: nil,
+            createdAt: Date(),
+            updatedAt: Date()
         )
         
         viewModel.generateGoalRecommendations(profile: profile)
@@ -176,8 +216,10 @@ struct ProfileSetupView: View {
     }
 }
 
+// MARK: - Supporting Views
+
 struct ActivityLevelCard: View {
-    let level: UserProfile.ActivityLevel
+    let level: NutritionGoals.ActivityLevel
     let isSelected: Bool
     let action: () -> Void
     
@@ -193,6 +235,7 @@ struct ActivityLevelCard: View {
                     Text(level.description)
                         .font(.caption)
                         .foregroundColor(.secondary)
+                        .multilineTextAlignment(.leading)
                 }
                 
                 Spacer()
@@ -200,6 +243,7 @@ struct ActivityLevelCard: View {
                 if isSelected {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundColor(.blue)
+                        .font(.title3)
                 }
             }
             .padding()
@@ -220,7 +264,7 @@ struct ActivityLevelCard: View {
 }
 
 struct GoalCard: View {
-    let goal: UserProfile.Goal
+    let goal: NutritionGoals.Goal.GoalType
     let isSelected: Bool
     let action: () -> Void
     
@@ -236,6 +280,7 @@ struct GoalCard: View {
                     Text(goal.description)
                         .font(.caption)
                         .foregroundColor(.secondary)
+                        .multilineTextAlignment(.leading)
                 }
                 
                 Spacer()
@@ -243,6 +288,7 @@ struct GoalCard: View {
                 if isSelected {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundColor(.blue)
+                        .font(.title3)
                 }
             }
             .padding()
@@ -263,7 +309,8 @@ struct GoalCard: View {
 }
 
 // MARK: - Extensions
-extension UserProfile.ActivityLevel {
+
+extension NutritionGoals.ActivityLevel {
     var displayName: String {
         switch self {
         case .sedentary: return "Sedentary"
@@ -273,40 +320,7 @@ extension UserProfile.ActivityLevel {
         case .extremely: return "Extremely Active"
         }
     }
-    
-    var description: String {
-        switch self {
-        case .sedentary: return "Little to no exercise"
-        case .lightly: return "Light exercise 1-3 days/week"
-        case .moderately: return "Moderate exercise 3-5 days/week"
-        case .very: return "Heavy exercise 6-7 days/week"
-        case .extremely: return "Physical job + exercise"
-        }
-    }
 }
-
-extension UserProfile.Goal {
-    var displayName: String {
-        switch self {
-        case .weightLoss: return "Lose Weight"
-        case .maintenance: return "Maintain Weight"
-        case .weightGain: return "Gain Weight"
-        case .muscle: return "Build Muscle"
-        case .endurance: return "Improve Endurance"
-        }
-    }
-    
-    var description: String {
-        switch self {
-        case .weightLoss: return "Create a calorie deficit"
-        case .maintenance: return "Balance calories in/out"
-        case .weightGain: return "Create a calorie surplus"
-        case .muscle: return "High protein, strength focus"
-        case .endurance: return "Focus on stamina and cardio"
-        }
-    }
-}
-
 #Preview {
     NavigationView {
         ProfileSetupView(viewModel: GoalsViewModel())

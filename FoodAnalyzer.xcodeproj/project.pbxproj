@@ -24,6 +24,7 @@
 		172025F72E0DD172007757AF /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025D92E0DD172007757AF /* ChartView.swift */; };
 		172025F82E0DD172007757AF /* RecommendationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025E92E0DD172007757AF /* RecommendationsView.swift */; };
 		172025FF2E0DD172007757AF /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172025DC2E0DD172007757AF /* PrimaryButton.swift */; };
+		1780E4D72E1097EB00FFCE72 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1780E4D62E1097EB00FFCE72 /* HapticManager.swift */; };
 		A12345671000000100000001 /* FoodAnalyzerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12345661000000100000001 /* FoodAnalyzerApp.swift */; };
 		A12345691000000100000001 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12345681000000100000001 /* ContentView.swift */; };
 		A123456B1000000200000001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A123456A1000000200000001 /* Assets.xcassets */; };
@@ -80,6 +81,7 @@
 		172025DC2E0DD172007757AF /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
 		172025DD2E0DD172007757AF /* ProgressRing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressRing.swift; sourceTree = "<group>"; };
 		172025E92E0DD172007757AF /* RecommendationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendationsView.swift; sourceTree = "<group>"; };
+		1780E4D62E1097EB00FFCE72 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		A12345631000000100000001 /* FoodAnalyzer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FoodAnalyzer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A12345661000000100000001 /* FoodAnalyzerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodAnalyzerApp.swift; sourceTree = "<group>"; };
 		A12345681000000100000001 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -215,6 +217,7 @@
 		A12346291000000500000001 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				1780E4D62E1097EB00FFCE72 /* HapticManager.swift */,
 				A12345971000000400000001 /* KeychainManager.swift */,
 			);
 			path = Utilities;
@@ -390,6 +393,7 @@
 				A12346101000000400000001 /* FoodAnalysisViewModel.swift in Sources */,
 				172025D42E0DD14E007757AF /* GoalEditingView.swift in Sources */,
 				172025C52E0DCD00007757AF /* HistoryViewModel.swift in Sources */,
+				1780E4D72E1097EB00FFCE72 /* HapticManager.swift in Sources */,
 				172025C62E0DCD00007757AF /* GoalsViewModel.swift in Sources */,
 				172025BC2E0DCC21007757AF /* AchievementsView.swift in Sources */,
 				172025BA2E0DCC1B007757AF /* EnhancedHistoryView.swift in Sources */,

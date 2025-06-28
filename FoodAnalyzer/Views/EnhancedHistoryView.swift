@@ -1,5 +1,17 @@
 import SwiftUI
 
+// MARK: - DateRange Extensions for Hashable/Equatable
+extension DateRange: Hashable, Equatable {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(startDate)
+        hasher.combine(endDate)
+    }
+    
+    static func == (lhs: DateRange, rhs: DateRange) -> Bool {
+        return lhs.startDate == rhs.startDate && lhs.endDate == rhs.endDate
+    }
+}
+
 struct EnhancedHistoryView: View {
     @StateObject private var viewModel = HistoryViewModel()
     @State private var showSearchBar = false
@@ -215,10 +227,11 @@ struct EnhancedHistoryView: View {
                         .foregroundColor(Color.theme.textPrimary)
                     
                     LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: .spacing.sm) {
-                        ForEach([DateRange.today, .thisWeek, .thisMonth, .last30Days], id: \.self) { range in
+                        let ranges = [DateRange.today, .thisWeek, .thisMonth, .last30Days]
+                        ForEach(Array(ranges.enumerated()), id: \.offset) { index, range in
                             FilterOptionButton(
                                 title: range.displayName,
-                                isSelected: viewModel.selectedDateRange == range
+                                isSelected: isDateRangeSelected(range)
                             ) {
                                 viewModel.selectedDateRange = range
                             }
@@ -355,7 +368,7 @@ struct EnhancedHistoryView: View {
             
             AnalyticsStatCard(
                 title: "Avg Calories",
-                value: "\(viewModel.analyticsData.averageCalories)",
+                value: "\(Int(viewModel.analyticsData.averageCaloriesPerDay))",
                 icon: "flame.fill",
                 color: Color.theme.secondary
             )
@@ -368,8 +381,8 @@ struct EnhancedHistoryView: View {
             )
             
             AnalyticsStatCard(
-                title: "Healthy Meals",
-                value: "\(viewModel.analyticsData.healthScoreDistribution.healthy)",
+                title: "Health Score",
+                value: "\(String(format: "%.1f", viewModel.analyticsData.averageHealthScore))",
                 icon: "heart.fill",
                 color: Color.theme.accent
             )
@@ -379,43 +392,41 @@ struct EnhancedHistoryView: View {
     
     private var chartsSection: some View {
         VStack(spacing: .spacing.lg) {
-            // Weekly trend chart
-            if !viewModel.analyticsData.weeklyTrends.isEmpty {
+            // Calorie trend chart
+            if !viewModel.analyticsData.caloriesTrend.isEmpty {
                 LineChartView(
-                    data: viewModel.analyticsData.weeklyTrends.map { trend in
-                        ChartDataPoint(label: "W\(trend.week)", value: Double(trend.averageCalories))
+                    data: viewModel.analyticsData.caloriesTrend.map { trend in
+                        ChartDataPoint(
+                            label: formatDateLabel(trend.date),
+                            value: Double(trend.calories)
+                        )
                     },
-                    title: "Weekly Calorie Trends"
+                    title: "Calorie Trends"
                 )
                 .containerPadding()
             }
             
-            // Health score distribution
+            // Nutrition breakdown chart
             DonutChartView(
                 data: [
                     DonutChartSegment(
-                        label: "Healthy",
-                        value: Double(viewModel.analyticsData.healthScoreDistribution.healthy),
+                        label: "Protein",
+                        value: viewModel.analyticsData.nutritionBreakdown.proteinPercentage,
                         color: Color.theme.success
                     ),
                     DonutChartSegment(
-                        label: "Good",
-                        value: Double(viewModel.analyticsData.healthScoreDistribution.good),
+                        label: "Fat",
+                        value: viewModel.analyticsData.nutritionBreakdown.fatPercentage,
                         color: Color.theme.primary
                     ),
                     DonutChartSegment(
-                        label: "Fair",
-                        value: Double(viewModel.analyticsData.healthScoreDistribution.fair),
+                        label: "Carbs",
+                        value: viewModel.analyticsData.nutritionBreakdown.carbsPercentage,
                         color: Color.theme.warning
-                    ),
-                    DonutChartSegment(
-                        label: "Poor",
-                        value: Double(viewModel.analyticsData.healthScoreDistribution.poor),
-                        color: Color.theme.error
                     )
                 ],
-                title: "Health Score Distribution",
-                centerText: "\(viewModel.analyticsData.totalAnalyses)"
+                title: "Nutrition Breakdown",
+                centerText: "Macros"
             )
             .containerPadding()
         }
@@ -429,7 +440,7 @@ struct EnhancedHistoryView: View {
                 .containerPadding()
             
             VStack(spacing: .spacing.sm) {
-                ForEach(Array(viewModel.analyticsData.topFoods.enumerated()), id: \.offset) { index, food in
+                ForEach(Array(viewModel.analyticsData.mostFrequentFoods.enumerated()), id: \.offset) { index, food in
                     HStack {
                         // Rank
                         ZStack {
@@ -486,6 +497,18 @@ struct EnhancedHistoryView: View {
     }
     
     // MARK: - Helper Methods
+    
+    private func isDateRangeSelected(_ range: DateRange) -> Bool {
+        return viewModel.selectedDateRange.startDate == range.startDate &&
+               viewModel.selectedDateRange.endDate == range.endDate
+    }
+    
+    private func formatDateLabel(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM d"
+        return formatter.string(from: date)
+    }
+    
     private func rankColor(for index: Int) -> Color {
         switch index {
         case 0: return .yellow
@@ -770,12 +793,24 @@ struct MacroStat: View {
 // MARK: - Extensions
 extension DateRange {
     var displayName: String {
-        switch self {
-        case .today: return "Today"
-        case .thisWeek: return "This Week"
-        case .thisMonth: return "This Month"
-        case .last30Days: return "Last 30 Days"
-        case .custom: return "Custom"
+        let calendar = Calendar.current
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        
+        if calendar.isDate(startDate, inSameDayAs: endDate) {
+            return "Today"
+        } else if calendar.isDate(startDate, equalTo: Date().startOfWeek, toGranularity: .day) {
+            return "This Week"
+        } else if calendar.isDate(startDate, equalTo: Date().startOfMonth, toGranularity: .day) {
+            return "This Month"
+        } else if calendar.dateComponents([.day], from: startDate, to: Date()).day == 30 {
+            return "Last 30 Days"
+        } else {
+            return "\(formatter.string(from: startDate)) - \(formatter.string(from: endDate))"
         }
     }
+}
+
+#Preview {
+    EnhancedHistoryView()
 }

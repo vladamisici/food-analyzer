@@ -353,11 +353,22 @@ struct NutritionCard: View {
     
     private func insightIcon(for type: FoodAnalysisResponse.NutritionInsight.InsightType) -> String {
         switch type {
-        case .highSodium: return "exclamationmark.triangle"
-        case .lowProtein: return "info.circle"
-        case .highSugar: return "exclamationmark.triangle"
-        case .goodFiber: return "checkmark.circle"
-        case .balanced: return "checkmark.circle"
+        case .highSodium:
+            return "exclamationmark.triangle"
+        case .lowProtein:
+            return "info.circle"
+        case .goodProtein:
+            return "bolt.circle.fill"
+        case .highFat:
+            return "exclamationmark.triangle"
+        case .highCalorie:
+            return "flame.circle"
+        case .highSugar:
+            return "exclamationmark.triangle"
+        case .goodFiber:
+            return "checkmark.circle"
+        case .balanced:
+            return "checkmark.circle"
         }
     }
 }

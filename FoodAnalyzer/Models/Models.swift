@@ -142,7 +142,7 @@ struct FoodAnalysisResponse: Codable, Identifiable, Equatable {
             .replacingOccurrences(of: "grams", with: "")
             .replacingOccurrences(of: "gram", with: "")
             .replacingOccurrences(of: "g", with: "")
-            .trimmingCharacters(in: .whitespacesAndPunctuation)
+            .trimmingCharacters(in: CharacterSet.whitespaces.union(.punctuationCharacters))
         
         // Extract numeric value using regex for better accuracy
         let numericString = cleanString.replacingOccurrences(
@@ -333,7 +333,7 @@ struct FoodAnalysisResponse: Codable, Identifiable, Equatable {
     }
     
     struct NutritionInsight: Codable, Identifiable, Equatable {
-        let id = UUID()
+        var id = UUID()
         let type: InsightType
         let message: String
         let severity: Severity
@@ -441,7 +441,7 @@ struct FoodAnalysisResponse: Codable, Identifiable, Equatable {
 
 // MARK: - Analysis History Model
 struct AnalysisHistory: Codable, Identifiable {
-    let id = UUID()
+    var id = UUID()
     let analyses: [FoodAnalysisResponse]
     let totalAnalyses: Int
     let averageHealthScore: Double
@@ -523,12 +523,12 @@ struct NutritionGoals: Codable, Identifiable {
     }
     
     struct Goal: Codable, Identifiable {
-        let id = UUID()
+        var id = UUID()
         let type: GoalType
         let target: Double
         let current: Double
         let deadline: Date?
-        let createdAt: Date = Date()
+        var createdAt: Date = Date()
         
         enum GoalType: String, Codable, CaseIterable {
             case weightLoss = "weight_loss"
@@ -916,5 +916,141 @@ extension Date {
                 return formattedAs("MMM d")
             }
         }
+    }
+}
+
+// MARK: - Nutrition Extensions for Existing Models
+
+// Extension pentru FoodAnalysisResponse pentru a avea acces rapid la valorile nutritive
+extension FoodAnalysisResponse {
+    /// Simple nutrition data for UI display (4-tuple without fiber)
+    var simpleNutrition: (calories: Double, protein: Double, carbs: Double, fat: Double) {
+        return (
+            calories: Double(calories),
+            protein: proteinValue,
+            carbs: carbsValue,
+            fat: fatValue
+        )
+    }
+    
+    /// Complete nutrition data including fiber (5-tuple)
+    var completeNutrition: (calories: Double, protein: Double, carbs: Double, fat: Double, fiber: Double?) {
+        return (
+            calories: Double(calories),
+            protein: proteinValue,
+            carbs: carbsValue,
+            fat: fatValue,
+            fiber: nil
+        )
+    }
+    
+    /// Total macros in grams
+    var totalMacros: Double {
+        return proteinValue + fatValue + carbsValue
+    }
+    
+    /// Calculated calories from macros (for validation)
+    var caloriesFromMacros: Double {
+        return (proteinValue * 4) + (fatValue * 9) + (carbsValue * 4)
+    }
+}
+
+// Extension pentru DailyProgress pentru a avea acces la nutrition summary
+extension DailyProgress {
+    /// Simple nutrition summary for UI display (4-tuple)
+    var nutritionSummary: (calories: Double, protein: Double, carbs: Double, fat: Double) {
+        return (
+            calories: Double(totalCalories),
+            protein: totalProtein,
+            carbs: totalCarbs,
+            fat: totalFat
+        )
+    }
+    
+    /// Complete nutrition summary including fiber (5-tuple)
+    var completeNutritionSummary: (calories: Double, protein: Double, carbs: Double, fat: Double, fiber: Double?) {
+        return (
+            calories: Double(totalCalories),
+            protein: totalProtein,
+            carbs: totalCarbs,
+            fat: totalFat,
+            fiber: nil
+        )
+    }
+    
+    /// Average nutrition per meal
+    var averageNutritionPerMeal: (calories: Double, protein: Double, carbs: Double, fat: Double) {
+        let mealCount = max(mealsCount, 1) // Avoid division by zero
+        return (
+            calories: Double(totalCalories) / Double(mealCount),
+            protein: totalProtein / Double(mealCount),
+            carbs: totalCarbs / Double(mealCount),
+            fat: totalFat / Double(mealCount)
+        )
+    }
+}
+
+// Extension pentru NutritionGoals pentru a avea computed properties compatibile
+extension NutritionGoals {
+    var dailyCalories: Double { Double(dailyCalorieGoal) }
+    var dailyProtein: Double { proteinGoal }
+    var dailyCarbs: Double { carbsGoal }
+    var dailyFat: Double { fatGoal }
+    var dailyFiber: Double { fiberGoal }
+}
+
+// Extension pentru WeeklyProgress
+extension WeeklyProgress {
+    /// Weekly nutrition summary
+    var nutritionSummary: (calories: Double, protein: Double, carbs: Double, fat: Double) {
+        return (
+            calories: Double(totalCalories),
+            protein: totalProtein,
+            carbs: totalCarbs,
+            fat: totalFat
+        )
+    }
+    
+    /// Average daily nutrition for the week
+    var averageDailyNutrition: (calories: Double, protein: Double, carbs: Double, fat: Double) {
+        return (
+            calories: Double(averageCalories),
+            protein: totalProtein / 7.0,
+            carbs: totalCarbs / 7.0,
+            fat: totalFat / 7.0
+        )
+    }
+}
+
+// Extension pentru o colecție de FoodAnalysisResponse pentru agregări
+extension Array where Element == FoodAnalysisResponse {
+    /// Aggregate nutrition from multiple analyses (4-tuple)
+    var aggregatedNutrition: (calories: Double, protein: Double, carbs: Double, fat: Double) {
+        let totalCals = self.reduce(0) { $0 + $1.calories }
+        let totalProtein = self.reduce(0.0) { $0 + $1.proteinValue }
+        let totalCarbs = self.reduce(0.0) { $0 + $1.carbsValue }
+        let totalFat = self.reduce(0.0) { $0 + $1.fatValue }
+        
+        return (
+            calories: Double(totalCals),
+            protein: totalProtein,
+            carbs: totalCarbs,
+            fat: totalFat
+        )
+    }
+    
+    /// Average nutrition per analysis (4-tuple)
+    var averageNutrition: (calories: Double, protein: Double, carbs: Double, fat: Double) {
+        guard !isEmpty else { return (0, 0, 0, 0) }
+        
+        let aggregated = aggregatedNutrition
+        let count = Double(self.count)
+        
+        return (
+            calories: aggregated.calories / count,
+            protein: aggregated.protein / count,
+            carbs: aggregated.carbs / count,
+            fat: aggregated.fat / count
+        )
     }
 }

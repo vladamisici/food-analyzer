@@ -7,6 +7,17 @@ struct DateRange {
     let startDate: Date
     let endDate: Date
     
+    // Custom initializer for creating date ranges with start and end dates
+    init(startDate: Date, endDate: Date) {
+        self.startDate = startDate
+        self.endDate = endDate
+    }
+    
+    // Static method for custom date ranges
+    static func custom(start: Date, end: Date) -> DateRange {
+        return DateRange(startDate: start, endDate: end)
+    }
+    
     static var today: DateRange {
         let now = Date()
         return DateRange(startDate: now.startOfDay, endDate: now.endOfDay)
@@ -24,6 +35,81 @@ struct DateRange {
         let startOfMonth = now.startOfMonth
         let endOfMonth = Calendar.current.date(byAdding: .month, value: 1, to: startOfMonth) ?? now
         return DateRange(startDate: startOfMonth, endDate: endOfMonth)
+    }
+    
+    // Missing static property for last 30 days
+    static var last30Days: DateRange {
+        let calendar = Calendar.current
+        let now = Date()
+        let start = calendar.date(byAdding: .day, value: -30, to: now) ?? now
+        return DateRange(startDate: start, endDate: now)
+    }
+    
+    // Additional useful date ranges
+    static var yesterday: DateRange {
+        let calendar = Calendar.current
+        let now = Date()
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: now) ?? now
+        return DateRange(startDate: yesterday.startOfDay, endDate: yesterday.endOfDay)
+    }
+    
+    static var lastWeek: DateRange {
+        let calendar = Calendar.current
+        let now = Date()
+        let lastWeekStart = calendar.date(byAdding: .weekOfYear, value: -1, to: now.startOfWeek) ?? now
+        let lastWeekEnd = calendar.date(byAdding: .day, value: 6, to: lastWeekStart) ?? now
+        return DateRange(startDate: lastWeekStart, endDate: lastWeekEnd.endOfDay)
+    }
+    
+    static var lastMonth: DateRange {
+        let calendar = Calendar.current
+        let now = Date()
+        let lastMonthStart = calendar.date(byAdding: .month, value: -1, to: now.startOfMonth) ?? now
+        let lastMonthEnd = calendar.date(byAdding: .day, value: -1, to: now.startOfMonth) ?? now
+        return DateRange(startDate: lastMonthStart, endDate: lastMonthEnd.endOfDay)
+    }
+    
+    // Computed properties for convenience
+    var duration: TimeInterval {
+        return endDate.timeIntervalSince(startDate)
+    }
+    
+    var daysCount: Int {
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.day], from: startDate, to: endDate)
+        return max(components.day ?? 0, 1)
+    }
+    
+    var isToday: Bool {
+        let calendar = Calendar.current
+        return calendar.isDateInToday(startDate) && calendar.isDateInToday(endDate)
+    }
+    
+    var isThisWeek: Bool {
+        let calendar = Calendar.current
+        return calendar.isDate(startDate, equalTo: Date(), toGranularity: .weekOfYear)
+    }
+    
+    var isThisMonth: Bool {
+        let calendar = Calendar.current
+        return calendar.isDate(startDate, equalTo: Date(), toGranularity: .month)
+    }
+    
+    // Helper method to check if a date falls within this range
+    func contains(_ date: Date) -> Bool {
+        return date >= startDate && date <= endDate
+    }
+    
+    // Helper method to format the date range for display
+    func displayString() -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        
+        if Calendar.current.isDate(startDate, inSameDayAs: endDate) {
+            return formatter.string(from: startDate)
+        } else {
+            return "\(formatter.string(from: startDate)) - \(formatter.string(from: endDate))"
+        }
     }
 }
 

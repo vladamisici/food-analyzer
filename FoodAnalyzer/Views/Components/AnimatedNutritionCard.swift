@@ -97,19 +97,41 @@ struct AnimatedNutritionCard: View {
 }
 
 struct AnimatedNutritionGrid: View {
-    let nutrition: Nutrition
+    let nutritionData: (calories: Double, protein: Double, carbs: Double, fat: Double)
     let goals: NutritionGoals?
     @State private var selectedCard: String? = nil
+    
+    // Convenience initializers for different data sources
+    init(from analysis: FoodAnalysisResponse, goals: NutritionGoals? = nil) {
+        self.nutritionData = analysis.simpleNutrition
+        self.goals = goals
+    }
+    
+    init(from dailyProgress: DailyProgress, goals: NutritionGoals? = nil) {
+        self.nutritionData = dailyProgress.nutritionSummary
+        self.goals = goals
+    }
+    
+    init(from analyses: [FoodAnalysisResponse], goals: NutritionGoals? = nil) {
+        self.nutritionData = analyses.aggregatedNutrition
+        self.goals = goals
+    }
+    
+    // Direct initializer
+    init(calories: Double, protein: Double, carbs: Double, fat: Double, goals: NutritionGoals? = nil) {
+        self.nutritionData = (calories: calories, protein: protein, carbs: carbs, fat: fat)
+        self.goals = goals
+    }
     
     var body: some View {
         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
             AnimatedNutritionCard(
                 title: "Calories",
-                value: nutrition.calories,
+                value: nutritionData.calories,
                 unit: "kcal",
                 color: .orange,
                 icon: "flame.fill",
-                progress: goals != nil ? nutrition.calories / goals!.dailyCalories : 0
+                progress: goals != nil ? nutritionData.calories / goals!.dailyCalories : 0
             )
             .slideIn(delay: 0.1)
             .onTapGesture {
@@ -121,11 +143,11 @@ struct AnimatedNutritionGrid: View {
             
             AnimatedNutritionCard(
                 title: "Protein",
-                value: nutrition.protein,
+                value: nutritionData.protein,
                 unit: "g",
                 color: .blue,
                 icon: "bolt.fill",
-                progress: goals != nil ? nutrition.protein / goals!.dailyProtein : 0
+                progress: goals != nil ? nutritionData.protein / goals!.dailyProtein : 0
             )
             .slideIn(delay: 0.2)
             .onTapGesture {
@@ -137,11 +159,11 @@ struct AnimatedNutritionGrid: View {
             
             AnimatedNutritionCard(
                 title: "Carbs",
-                value: nutrition.carbs,
+                value: nutritionData.carbs,
                 unit: "g",
                 color: .green,
                 icon: "leaf.fill",
-                progress: goals != nil ? nutrition.carbs / goals!.dailyCarbs : 0
+                progress: goals != nil ? nutritionData.carbs / goals!.dailyCarbs : 0
             )
             .slideIn(delay: 0.3)
             .onTapGesture {
@@ -153,11 +175,11 @@ struct AnimatedNutritionGrid: View {
             
             AnimatedNutritionCard(
                 title: "Fat",
-                value: nutrition.fat,
+                value: nutritionData.fat,
                 unit: "g",
                 color: .purple,
                 icon: "drop.fill",
-                progress: goals != nil ? nutrition.fat / goals!.dailyFat : 0
+                progress: goals != nil ? nutritionData.fat / goals!.dailyFat : 0
             )
             .slideIn(delay: 0.4)
             .onTapGesture {
@@ -173,10 +195,14 @@ struct AnimatedNutritionGrid: View {
     }
 }
 
+
 #Preview {
     VStack {
         AnimatedNutritionGrid(
-            nutrition: Nutrition(calories: 450, protein: 25, carbs: 60, fat: 15),
+            calories: 450,
+            protein: 25,
+            carbs: 60,
+            fat: 15,
             goals: NutritionGoals(
                 id: UUID(),
                 dailyCalorieGoal: 2000,
