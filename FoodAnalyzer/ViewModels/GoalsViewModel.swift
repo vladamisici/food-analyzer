@@ -28,8 +28,8 @@ final class GoalsViewModel: ObservableObject {
     @Published var userWeight: String = ""
     @Published var userHeight: String = ""
     @Published var userGender: UserProfile.Gender = .male
-    @Published var userActivityLevel: UserProfile.ActivityLevel = .moderately
-    @Published var userGoal: UserProfile.Goal = .maintenance
+    @Published var userActivityLevel: NutritionGoals.ActivityLevel = .moderately
+    @Published var userGoal: NutritionGoals.Goal.GoalType = .maintenance
     
     // UI State
     @Published var isLoading = false
@@ -159,7 +159,11 @@ final class GoalsViewModel: ObservableObject {
             height: height,
             gender: userGender,
             activityLevel: userActivityLevel,
-            goal: userGoal
+            goal: userGoal,
+            preferences: nil,
+            medicalConditions: nil,
+            createdAt: Date(),
+            updatedAt: Date()
         )
         
         switch goalsRepository.generateGoalRecommendations(userProfile: profile) {

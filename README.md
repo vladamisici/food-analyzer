@@ -1,122 +1,135 @@
 # 🍎 Food Analyzer iOS App
 
+This is a SwiftUI-based iOS application for food analysis. It's built with a focus on a clean, scalable architecture and a rich, modern user experience. The project demonstrates a robust implementation of MVVM, a repository pattern for data management, and a comprehensive design system.
 
-###  **Architecture**
-- **MVVM + Repository Pattern** with dependency injection
-- **Protocol-oriented design** for testability and modularity  
-- **Result-based error handling** with comprehensive AppError types
-- **Keychain security** for sensitive data storage
-- **Clean separation of concerns** across layers
+---
 
-### **Design**
-- **Custom color palette** with semantic theming
-- **Typography scale** with consistent font styles
-- **Spacing system** for perfect layouts
-- **Component library** with reusable UI elements
-- **Smooth animations** and haptic feedback
+### Core Architecture
 
-### **Features**
-- **Multi-step registration** with password strength validation
-- **Beautiful onboarding** with animated explanations
-- **Real-time analysis progress** with visual feedback
-- **Enhanced image processing** with automatic optimization
-- **Rich nutrition cards** with insights and coaching tips
-- **Analysis history** with local caching
+The application is architected around a **protocol-oriented MVVM** pattern, ensuring a clear separation between the view, its state, and the business logic.
 
-### **Security & Performance**
-- **Keychain Manager** for secure token storage
-- **Input validation** with user-friendly error messages
-- **Image optimization** for better performance
-- **Offline caching** for analysis history
-- **Network layer** with proper error handling
-- **JWT authentication** with refresh tokens
+-   **MVVM:** Each feature is broken down into a `View` (UI), a `ViewModel` (state and logic), and `Models` (data structures). This keeps the code organized, testable, and easy to reason about.
+-   **Repository Pattern:** Data access is abstracted through a repository layer (`AuthRepository`, `HistoryRepository`, `GoalsRepository`). This decouples the ViewModels from the specific data sources (Core Data, Keychain, API), making it easy to swap implementations or add caching layers.
+-   **Dependency Injection (DI):** A simple `DependencyContainer` is used to manage and inject dependencies like repositories and services. This promotes loose coupling and enhances testability.
+-   **Core Data & Keychain:** Local data persistence is handled by Core Data for structured data like analysis history and goals. Sensitive information, such as auth tokens, is securely stored in the Keychain using a `KeychainManager` wrapper.
+-   **Robust Error Handling:** The app uses a `Result`-based error handling system with a set of custom `AppError` types. This ensures that errors from the network, storage, or validation layers are handled gracefully and provide clear, user-friendly feedback.
+-   **Networking:** All API interactions are managed by a protocol-based `APIService`, making it straightforward to mock for testing. The service includes configurations for different backend environments.
 
-## 📱 Project Structure
+### Key Features
 
-```
-FoodAnalyzer/
-├── FoodAnalyzerApp.swift           # App entry with state management
-├── ContentView.swift               # Main navigation controller
-├── DesignSystem/
-│   ├── Colors.swift               # Complete color system
-│   ├── Typography.swift           # Font scales & styles
-│   └── Spacing.swift              # Layout system
-├── Core/
-│   └── Result+Extensions.swift    # Enhanced error handling
-├── Utilities/
-│   └── KeychainManager.swift      # Secure storage
-├── Repository/
-│   └── AuthRepository.swift       # Data layer abstraction
-├── Services/
-│   ├── APIService.swift           # Enhanced network layer
-│   └── Config.swift               # Configuration
-├── Models/
-│   └── Models.swift               # Rich data models
-├── ViewModels/
-│   ├── AuthViewModel.swift        # Auth state management
-│   └── FoodAnalysisViewModel.swift # Analysis logic
-├── Views/
-│   ├── Components/
-│   │   ├── PrimaryButton.swift    # Beautiful button component
-│   │   ├── CustomTextField.swift  # Enhanced input fields
-│   │   └── NutritionCard.swift    # Rich result display
-│   ├── LoginView.swift            # Stunning auth UI
-│   ├── RegisterView.swift         # Multi-step registration
-│   ├── FoodAnalysisView.swift     # Main feature UI
-│   ├── PhotoPickerView.swift      # Image selection
-│   └── ResultsView.swift          # Nutrition display
-└── Assets.xcassets               # App assets
-```
+-   **Authentication:**
+    -   Secure, multi-step registration flow with real-time password strength validation.
+    -   JWT-based authentication with secure token storage in the Keychain.
+    -   Elegant onboarding and login screens with a polished UI.
 
-## Features
+-   **Food Analysis:**
+    -   Image selection from the camera or photo library using `PhotosPicker`.
+    -   Client-side image optimization before upload to reduce network load.
+    -   Real-time visual feedback on the analysis progress (`Uploading`, `Processing`, `Complete`).
+    -   Results are displayed in rich, animated `NutritionCard` components.
 
-### **Core Requirements**
-- **Authentication**: Register/login with JWT tokens
-- **Photo Selection**: Camera and photo library integration
-- **API Integration**: Food analysis with base64 image upload
-- **Results Display**: Nutrition information with local editing
-- **MVVM Architecture**: Clean separation of concerns
+-   **History & Goals:**
+    -   Persistent storage of analysis history and nutrition goals using Core Data.
+    -   Comprehensive history view with filtering (date range, health score) and sorting capabilities.
+    -   A dedicated goals screen with progress tracking, visualised through animated `ProgressRing` components.
+    -   Personalized goal recommendations based on user profile data (age, weight, activity level, etc.).
 
-### **Features**
-- **Onboarding Experience**: 3-step introduction
-- **Multi-step Registration**: Progressive form with validation
-- **Password Strength**: Real-time strength indicator
-- **Analysis Progress**: Visual feedback during processing
-- **Rich Results**: Detailed nutrition cards with insights
-- **History Tracking**: Local storage of analysis results
-- **Error Handling**: User-friendly error messages
-- **Haptic Feedback**: Tactile interaction feedback
-- **Social Login UI**: Apple/Google sign-in ready
+### Tech Stack
 
-## 🚀 Getting Started
+-   **Framework:** SwiftUI
+-   **State Management:** Combine for reactive data binding.
+-   **Architecture:** MVVM, Repository Pattern, Protocol-Oriented Programming
+-   **Database:** Core Data
+-   **Networking:** URLSession
+-   **Security:** Keychain
 
-### **Prerequisites**
-- **macOS 12.0+** with **Xcode 14+**
-- **Docker Desktop**
+### Getting Started
 
-### **1. Start Backend Services**
+#### Prerequisites
+
+-   **macOS 12.0+** with **Xcode 14+**
+-   **Docker Desktop**
+
+#### 1. Start Backend Services
+
 ```bash
+# Navigate to the backend directory
 cd ../backend_docker
+
+# Start the services in detached mode
 docker compose up -d
 
-# Verify services are running
-curl http://localhost:5051/health  # Auth service
-curl http://localhost:5052/health  # Food service
+# Verify that the services are running
+curl http://localhost:5051/health  # Auth service should return OK
+curl http://localhost:5052/health  # Food service should return OK
 ```
 
-### **2. Open iOS Project**
-```bash
+2. Open iOS Project
+
+```Bash
 open FoodAnalyzer.xcodeproj
+Build and run the project in Xcode.
 ```
 
-- **Testable**: Protocol-based design enables easy unit testing
-- **Maintainable**: Clear separation of concerns
-- **Scalable**: Repository pattern supports multiple data sources
-- **Secure**: Keychain storage and proper validation
-- **Performant**: Image optimization and caching
+Test User Accounts
+A pre-created account is available for testing:
 
+Email: test@test.health
 
-### **Test User Accounts**
-Pre-created accounts for testing:
-- Email: `test@test.health`
-- Password: `password123`
+Password: password123
+
+Project Structure
+```Bash
+FoodAnalyzer/
+├── FoodAnalyzerApp.swift           # App entry point, manages global state
+├── ContentView.swift               # Root view, handles navigation (onboarding, auth, main)
+│
+├── DesignSystem/                   # Reusable UI elements and styles
+│   ├── Colors.swift                # App-wide color theme
+│   ├── Typography.swift            # Font styles and scales
+│   └── Spacing.swift               # Spacing and layout system
+│
+├── Core/
+│   └── Result+Extensions.swift     # Custom Result type and AppError enums
+│
+├── Utilities/
+│   ├── KeychainManager.swift       # Secure wrapper for Keychain access
+│   └── HapticManager.swift         # Centralized haptic feedback control
+│
+├── Services/
+│   ├── APIService.swift            # Handles all network requests
+│   └── Config.swift                # Backend service configuration
+│
+├── Models/
+│   └── Models.swift                # Data models (User, AuthResponse, etc.)
+│
+├── ViewModels/
+│   ├── AuthViewModel.swift         # Manages authentication state and logic
+│   ├── FoodAnalysisViewModel.swift # Handles image selection and analysis flow
+│   ├── HistoryViewModel.swift      # Manages history and analytics data
+│   └── GoalsViewModel.swift        # Manages nutrition goals and progress
+│
+├── Views/
+│   ├── Components/                 # Reusable SwiftUI views
+│   │   ├── PrimaryButton.swift
+│   │   ├── CustomTextField.swift
+│   │   ├── NutritionCard.swift
+│   │   ├── ChartView.swift
+│   │   ├── ProgressRing.swift
+│   │   └── AchievementCard.swift
+│   │
+│   ├── LoginView.swift             # Handles user login
+│   ├── RegisterView.swift          # Multi-step user registration
+│   ├── EnhancedFoodAnalysisView.swift  # Main screen for food analysis
+│   ├── EnhancedHistoryView.swift       # Displays analysis history and analytics
+│   └── EnhancedGoalsView.swift         # Displays user goals and progress
+│
+├── CoreData/
+│   ├── CoreDataManager.swift       # Singleton to manage the Core Data stack
+│   ├── FoodAnalysisEntity+...      # Core Data model for food analysis
+│   └── NutritionGoalEntity+...     # Core Data model for nutrition goals
+│
+└── Repository/
+    ├── AuthRepository.swift        # Handles authentication-related data operations
+    ├── CoreDataHistoryRepository.swift # Implements history repository with Core Data
+    └── CoreDataGoalsRepository.swift   # Implements goals repository with Core Data```

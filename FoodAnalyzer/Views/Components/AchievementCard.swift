@@ -1,5 +1,32 @@
 import SwiftUI
 
+// MARK: - Color Extensions
+extension Color {
+    // Convert string color names to Color objects
+    static func fromString(_ colorString: String) -> Color {
+        switch colorString.lowercased() {
+        case "blue":
+            return .blue
+        case "green":
+            return .green
+        case "orange":
+            return .orange
+        case "purple":
+            return .purple
+        case "pink":
+            return .pink
+        case "mint":
+            return .mint
+        case "red":
+            return .red
+        case "yellow":
+            return .yellow
+        default:
+            return .primary
+        }
+    }
+}
+
 struct AchievementCard: View {
     let achievement: Achievement
     let isCompact: Bool
@@ -25,12 +52,12 @@ struct AchievementCard: View {
             // Icon
             ZStack {
                 Circle()
-                    .fill(achievement.isUnlocked ? achievement.category.color.opacity(0.2) : Color.theme.textTertiary.opacity(0.1))
+                    .fill(achievement.isUnlocked ? Color.fromString(achievement.category.color).opacity(0.2) : Color.theme.textTertiary.opacity(0.1))
                     .frame(width: 40, height: 40)
                 
                 Image(systemName: achievement.icon)
                     .font(.title3)
-                    .foregroundColor(achievement.isUnlocked ? achievement.category.color : Color.theme.textTertiary)
+                    .foregroundColor(achievement.isUnlocked ? Color.fromString(achievement.category.color) : Color.theme.textTertiary)
                     .scaleEffect(animateUnlock ? 1.2 : 1.0)
             }
             
@@ -68,7 +95,7 @@ struct AchievementCard: View {
                 .overlay(
                     RoundedRectangle(cornerRadius: .spacing.cornerRadius)
                         .strokeBorder(
-                            achievement.isUnlocked ? achievement.category.color.opacity(0.3) : Color.clear,
+                            achievement.isUnlocked ? Color.fromString(achievement.category.color).opacity(0.3) : Color.clear,
                             lineWidth: 1
                         )
                 )
@@ -93,12 +120,12 @@ struct AchievementCard: View {
                 Text(achievement.category.rawValue)
                     .font(.caption)
                     .fontWeight(.medium)
-                    .foregroundColor(achievement.category.color)
+                    .foregroundColor(Color.fromString(achievement.category.color))
                     .padding(.horizontal, .spacing.sm)
                     .padding(.vertical, .spacing.xs)
                     .background(
                         Capsule()
-                            .fill(achievement.category.color.opacity(0.15))
+                            .fill(Color.fromString(achievement.category.color).opacity(0.15))
                     )
                 
                 Spacer()
@@ -116,9 +143,9 @@ struct AchievementCard: View {
                 ZStack {
                     Circle()
                         .fill(
-                            achievement.isUnlocked ? 
+                            achievement.isUnlocked ?
                             LinearGradient(
-                                colors: [achievement.category.color.opacity(0.3), achievement.category.color.opacity(0.1)],
+                                colors: [Color.fromString(achievement.category.color).opacity(0.3), Color.fromString(achievement.category.color).opacity(0.1)],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
                             ) :
@@ -132,7 +159,7 @@ struct AchievementCard: View {
                     
                     Image(systemName: achievement.icon)
                         .font(.system(size: 32))
-                        .foregroundColor(achievement.isUnlocked ? achievement.category.color : Color.theme.textTertiary)
+                        .foregroundColor(achievement.isUnlocked ? Color.fromString(achievement.category.color) : Color.theme.textTertiary)
                         .scaleEffect(animateUnlock ? 1.1 : 1.0)
                 }
                 
@@ -178,16 +205,16 @@ struct AchievementCard: View {
         .background(
             RoundedRectangle(cornerRadius: .spacing.cornerRadiusLarge)
                 .fill(
-                    achievement.isUnlocked ? 
+                    achievement.isUnlocked ?
                     Color.theme.surface :
                     Color.theme.backgroundSecondary
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: .spacing.cornerRadiusLarge)
                         .strokeBorder(
-                            achievement.isUnlocked ? 
+                            achievement.isUnlocked ?
                             LinearGradient(
-                                colors: [achievement.category.color.opacity(0.5), achievement.category.color.opacity(0.2)],
+                                colors: [Color.fromString(achievement.category.color).opacity(0.5), Color.fromString(achievement.category.color).opacity(0.2)],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
                             ) :
@@ -200,7 +227,7 @@ struct AchievementCard: View {
                         )
                 )
                 .shadow(
-                    color: achievement.isUnlocked ? achievement.category.color.opacity(0.1) : Color.black.opacity(0.05),
+                    color: achievement.isUnlocked ? Color.fromString(achievement.category.color).opacity(0.1) : Color.black.opacity(0.05),
                     radius: achievement.isUnlocked ? 15 : 8,
                     x: 0,
                     y: achievement.isUnlocked ? 5 : 2
@@ -249,7 +276,7 @@ struct AchievementCategoryFilterView: View {
                 ForEach(Achievement.AchievementCategory.allCases, id: \.self) { category in
                     CategoryFilterButton(
                         title: category.rawValue,
-                        color: category.color,
+                        color: Color.fromString(category.color),
                         isSelected: selectedCategory == category
                     ) {
                         selectedCategory = selectedCategory == category ? nil : category
@@ -284,24 +311,6 @@ struct CategoryFilterButton: View {
     }
 }
 
-// MARK: - Achievement Category Extension
-extension Achievement.AchievementCategory {
-    var color: Color {
-        switch self {
-        case .goals:
-            return Color.theme.primary
-        case .progress:
-            return Color.theme.secondary
-        case .streaks:
-            return Color.theme.warning
-        case .analysis:
-            return Color.theme.accent
-        case .social:
-            return Color(hex: "6C5CE7")
-        }
-    }
-}
-
 #Preview {
     ScrollView {
         VStack(spacing: .spacing.lg) {
@@ -314,7 +323,8 @@ extension Achievement.AchievementCategory {
                     icon: "target",
                     category: .goals,
                     unlockedAt: Date(),
-                    isUnlocked: true
+                    isUnlocked: true,
+                    points: 10
                 )
             )
             
@@ -327,7 +337,8 @@ extension Achievement.AchievementCategory {
                     icon: "flame.fill",
                     category: .streaks,
                     unlockedAt: Date(),
-                    isUnlocked: false
+                    isUnlocked: false,
+                    points: 25
                 )
             )
             
@@ -341,7 +352,8 @@ extension Achievement.AchievementCategory {
                         icon: "camera.fill",
                         category: .progress,
                         unlockedAt: Date(),
-                        isUnlocked: true
+                        isUnlocked: true,
+                        points: 5
                     ),
                     isCompact: true
                 )
@@ -354,7 +366,8 @@ extension Achievement.AchievementCategory {
                         icon: "heart.fill",
                         category: .social,
                         unlockedAt: Date(),
-                        isUnlocked: false
+                        isUnlocked: false,
+                        points: 15
                     ),
                     isCompact: true
                 )

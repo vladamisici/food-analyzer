@@ -2,113 +2,389 @@ import Foundation
 import CoreData
 import Combine
 
+// MARK: - Missing Supporting Types
+struct DateRange {
+    let startDate: Date
+    let endDate: Date
+    
+    static var today: DateRange {
+        let now = Date()
+        return DateRange(startDate: now.startOfDay, endDate: now.endOfDay)
+    }
+    
+    static var thisWeek: DateRange {
+        let now = Date()
+        let startOfWeek = now.startOfWeek
+        let endOfWeek = Calendar.current.date(byAdding: .weekOfYear, value: 1, to: startOfWeek) ?? now
+        return DateRange(startDate: startOfWeek, endDate: endOfWeek)
+    }
+    
+    static var thisMonth: DateRange {
+        let now = Date()
+        let startOfMonth = now.startOfMonth
+        let endOfMonth = Calendar.current.date(byAdding: .month, value: 1, to: startOfMonth) ?? now
+        return DateRange(startDate: startOfMonth, endDate: endOfMonth)
+    }
+}
+
+struct AnalyticsData {
+    let totalAnalyses: Int
+    let averageCaloriesPerDay: Double
+    let averageProtein: Double
+    let averageFat: Double
+    let averageCarbs: Double
+    let averageHealthScore: Double
+    let mostFrequentFoods: [String]
+    let caloriesTrend: [CalorieDataPoint]
+    let nutritionBreakdown: NutritionBreakdown
+    let weeklyStats: WeeklyStats
+    
+    struct CalorieDataPoint {
+        let date: Date
+        let calories: Int
+    }
+    
+    struct NutritionBreakdown {
+        let proteinPercentage: Double
+        let fatPercentage: Double
+        let carbsPercentage: Double
+        
+        static let empty = NutritionBreakdown(
+            proteinPercentage: 0.0,
+            fatPercentage: 0.0,
+            carbsPercentage: 0.0
+        )
+    }
+    
+    struct WeeklyStats {
+        let totalCalories: Int
+        let averageCalories: Int
+        let healthScoreImprovement: Double
+        
+        static let empty = WeeklyStats(
+            totalCalories: 0,
+            averageCalories: 0,
+            healthScoreImprovement: 0.0
+        )
+    }
+    
+    static let empty = AnalyticsData(
+        totalAnalyses: 0,
+        averageCaloriesPerDay: 0.0,
+        averageProtein: 0.0,
+        averageFat: 0.0,
+        averageCarbs: 0.0,
+        averageHealthScore: 0.0,
+        mostFrequentFoods: [],
+        caloriesTrend: [],
+        nutritionBreakdown: NutritionBreakdown.empty,
+        weeklyStats: WeeklyStats.empty
+    )
+}
+
+enum ExportFormat {
+    case csv
+    case json
+    case pdf
+    
+    var fileExtension: String {
+        switch self {
+        case .csv: return "csv"
+        case .json: return "json"
+        case .pdf: return "pdf"
+        }
+    }
+    
+    var mimeType: String {
+        switch self {
+        case .csv: return "text/csv"
+        case .json: return "application/json"
+        case .pdf: return "application/pdf"
+        }
+    }
+}
+
+// MARK: - Fixed CoreDataHistoryRepository
 class CoreDataHistoryRepository: HistoryRepositoryProtocol {
     private let coreDataManager = CoreDataManager.shared
     private let currentUserSubject = CurrentValueSubject<User?, Never>(nil)
+    private let analysesSubject = CurrentValueSubject<[FoodAnalysisResponse], Never>([])
     
     var currentUser: User? {
         get { currentUserSubject.value }
-        set { currentUserSubject.send(newValue) }
+        set {
+            currentUserSubject.send(newValue)
+            loadAnalyses() // Reload when user changes
+        }
     }
     
-    func saveAnalysis(_ analysis: FoodAnalysisResponse, imageData: Data?) async throws {
+    var analysesPublisher: AnyPublisher<[FoodAnalysisResponse], Never> {
+        analysesSubject.eraseToAnyPublisher()
+    }
+    
+    init() {
+        loadAnalyses()
+    }
+    
+    // MARK: - Protocol Implementation
+    func saveAnalysis(_ analysis: FoodAnalysisResponse) -> AppResult<Void> {
         guard let userId = currentUser?.id else {
-            throw AppError.unauthorized
+            return .failure(.authentication(.unauthorized))
         }
         
-        try await coreDataManager.performBackgroundTask { context in
-            _ = FoodAnalysisEntity.from(analysis, userId: userId, imageData: imageData, in: context)
+        do {
+            let context = coreDataManager.viewContext
+            _ = FoodAnalysisEntity.from(analysis, userId: userId, imageData: nil, in: context)
             try context.save()
+            
+            // Update publisher
+            loadAnalyses()
+            
+            return .success(())
+        } catch {
+            return .failure(.storage(.encodingFailed))
         }
     }
     
-    func getHistory() async throws -> [HistoryItem] {
+    func getAllAnalyses() -> AppResult<[FoodAnalysisResponse]> {
         guard let userId = currentUser?.id else {
-            throw AppError.unauthorized
+            return .failure(.authentication(.unauthorized))
         }
         
-        return try await coreDataManager.performBackgroundTask { context in
+        do {
+            let context = coreDataManager.viewContext
             let request = FoodAnalysisEntity.fetchRequest()
             request.predicate = NSPredicate(format: "userId == %@", userId)
             request.sortDescriptors = [NSSortDescriptor(key: "createdAt", ascending: false)]
             
             let entities = try context.fetch(request)
+            let analyses = entities.compactMap { $0.toFoodAnalysisResponse() }
             
-            return entities.compactMap { entity in
-                guard let id = entity.id,
-                      let createdAt = entity.createdAt else {
-                    return nil
-                }
-                
-                return HistoryItem(
-                    id: id,
-                    analysis: entity.toFoodAnalysisResponse(),
-                    imageData: entity.imageData,
-                    date: createdAt
-                )
-            }
+            return .success(analyses)
+        } catch {
+            return .failure(.storage(.decodingFailed))
         }
     }
     
-    func deleteHistoryItem(_ id: UUID) async throws {
+    func getAnalyses(for dateRange: DateRange) -> AppResult<[FoodAnalysisResponse]> {
         guard let userId = currentUser?.id else {
-            throw AppError.unauthorized
+            return .failure(.authentication(.unauthorized))
         }
         
-        try await coreDataManager.performBackgroundTask { context in
-            let request = FoodAnalysisEntity.fetchRequest()
-            request.predicate = NSPredicate(format: "id == %@ AND userId == %@", id as CVarArg, userId)
-            
-            if let entity = try context.fetch(request).first {
-                context.delete(entity)
-                try context.save()
-            }
-        }
-    }
-    
-    func clearHistory() async throws {
-        guard let userId = currentUser?.id else {
-            throw AppError.unauthorized
-        }
-        
-        try await coreDataManager.performBackgroundTask { context in
-            let request = NSFetchRequest<NSFetchRequestResult>(entityName: "FoodAnalysisEntity")
-            request.predicate = NSPredicate(format: "userId == %@", userId)
-            
-            let deleteRequest = NSBatchDeleteRequest(fetchRequest: request)
-            try context.execute(deleteRequest)
-            try context.save()
-        }
-    }
-    
-    func getHistoryForDateRange(from startDate: Date, to endDate: Date) async throws -> [HistoryItem] {
-        guard let userId = currentUser?.id else {
-            throw AppError.unauthorized
-        }
-        
-        return try await coreDataManager.performBackgroundTask { context in
+        do {
+            let context = coreDataManager.viewContext
             let request = FoodAnalysisEntity.fetchRequest()
             request.predicate = NSPredicate(
                 format: "userId == %@ AND createdAt >= %@ AND createdAt <= %@",
-                userId, startDate as NSDate, endDate as NSDate
+                userId, dateRange.startDate as NSDate, dateRange.endDate as NSDate
             )
             request.sortDescriptors = [NSSortDescriptor(key: "createdAt", ascending: false)]
             
             let entities = try context.fetch(request)
+            let analyses = entities.compactMap { $0.toFoodAnalysisResponse() }
             
-            return entities.compactMap { entity in
-                guard let id = entity.id,
-                      let createdAt = entity.createdAt else {
-                    return nil
-                }
+            return .success(analyses)
+        } catch {
+            return .failure(.storage(.decodingFailed))
+        }
+    }
+    
+    func searchAnalyses(query: String) -> AppResult<[FoodAnalysisResponse]> {
+        guard let userId = currentUser?.id else {
+            return .failure(.authentication(.unauthorized))
+        }
+        
+        do {
+            let context = coreDataManager.viewContext
+            let request = FoodAnalysisEntity.fetchRequest()
+            request.predicate = NSPredicate(
+                format: "userId == %@ AND itemName CONTAINS[cd] %@",
+                userId, query
+            )
+            request.sortDescriptors = [NSSortDescriptor(key: "createdAt", ascending: false)]
+            
+            let entities = try context.fetch(request)
+            let analyses = entities.compactMap { $0.toFoodAnalysisResponse() }
+            
+            return .success(analyses)
+        } catch {
+            return .failure(.storage(.decodingFailed))
+        }
+    }
+    
+    func deleteAnalysis(withId id: String) -> AppResult<Void> {
+        guard let userId = currentUser?.id else {
+            return .failure(.authentication(.unauthorized))
+        }
+        
+        do {
+            let context = coreDataManager.viewContext
+            let request = FoodAnalysisEntity.fetchRequest()
+            request.predicate = NSPredicate(format: "analysisId == %@ AND userId == %@", id, userId)
+            
+            if let entity = try context.fetch(request).first {
+                context.delete(entity)
+                try context.save()
                 
-                return HistoryItem(
-                    id: id,
-                    analysis: entity.toFoodAnalysisResponse(),
-                    imageData: entity.imageData,
-                    date: createdAt
-                )
+                // Update publisher
+                loadAnalyses()
+                
+                return .success(())
+            } else {
+                return .failure(.storage(.keyNotFound))
             }
+        } catch {
+            return .failure(.storage(.decodingFailed))
+        }
+    }
+    
+    func getAnalyticsData() -> AppResult<AnalyticsData> {
+        switch getAllAnalyses() {
+        case .success(let analyses):
+            let analytics = calculateAnalytics(from: analyses)
+            return .success(analytics)
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
+    func exportAnalyses(format: ExportFormat) -> AppResult<Data> {
+        switch getAllAnalyses() {
+        case .success(let analyses):
+            return exportData(analyses: analyses, format: format)
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
+    // MARK: - Private Helper Methods
+    private func loadAnalyses() {
+        switch getAllAnalyses() {
+        case .success(let analyses):
+            analysesSubject.send(analyses)
+        case .failure:
+            analysesSubject.send([])
+        }
+    }
+    
+    private func calculateAnalytics(from analyses: [FoodAnalysisResponse]) -> AnalyticsData {
+        guard !analyses.isEmpty else {
+            return AnalyticsData(
+                totalAnalyses: 0,
+                averageCaloriesPerDay: 0,
+                averageProtein: 0,
+                averageFat: 0,
+                averageCarbs: 0,
+                averageHealthScore: 0,
+                mostFrequentFoods: [],
+                caloriesTrend: [],
+                nutritionBreakdown: AnalyticsData.NutritionBreakdown(
+                    proteinPercentage: 0,
+                    fatPercentage: 0,
+                    carbsPercentage: 0
+                ),
+                weeklyStats: AnalyticsData.WeeklyStats(
+                    totalCalories: 0,
+                    averageCalories: 0,
+                    healthScoreImprovement: 0
+                )
+            )
+        }
+        
+        let totalCalories = analyses.reduce(0) { $0 + $1.calories }
+        let averageCalories = Double(totalCalories) / Double(analyses.count)
+        
+        let avgProtein = analyses.reduce(0.0) { $0 + $1.proteinValue } / Double(analyses.count)
+        let avgFat = analyses.reduce(0.0) { $0 + $1.fatValue } / Double(analyses.count)
+        let avgCarbs = analyses.reduce(0.0) { $0 + $1.carbsValue } / Double(analyses.count)
+        let avgHealthScore = analyses.reduce(0.0) { $0 + Double($1.healthScoreValue) } / Double(analyses.count)
+        
+        // Most frequent foods
+        let foodCounts = Dictionary(grouping: analyses) { $0.itemName }
+            .mapValues { $0.count }
+            .sorted { $0.value > $1.value }
+        let mostFrequentFoods = Array(foodCounts.prefix(5).map { $0.key })
+        
+        // Calories trend (last 30 days)
+        let thirtyDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()
+        let recentAnalyses = analyses.filter { $0.analysisDate >= thirtyDaysAgo }
+        let caloriesTrend = createCaloriesTrend(from: recentAnalyses)
+        
+        // Nutrition breakdown
+        let totalMacros = avgProtein + avgFat + avgCarbs
+        let nutritionBreakdown = AnalyticsData.NutritionBreakdown(
+            proteinPercentage: totalMacros > 0 ? (avgProtein / totalMacros) * 100 : 0,
+            fatPercentage: totalMacros > 0 ? (avgFat / totalMacros) * 100 : 0,
+            carbsPercentage: totalMacros > 0 ? (avgCarbs / totalMacros) * 100 : 0
+        )
+        
+        // Weekly stats
+        let weekAgo = Calendar.current.date(byAdding: .weekOfYear, value: -1, to: Date()) ?? Date()
+        let weeklyAnalyses = analyses.filter { $0.analysisDate >= weekAgo }
+        let weeklyCalories = weeklyAnalyses.reduce(0) { $0 + $1.calories }
+        let weeklyAverage = weeklyAnalyses.isEmpty ? 0 : weeklyCalories / weeklyAnalyses.count
+        
+        return AnalyticsData(
+            totalAnalyses: analyses.count,
+            averageCaloriesPerDay: averageCalories,
+            averageProtein: avgProtein,
+            averageFat: avgFat,
+            averageCarbs: avgCarbs,
+            averageHealthScore: avgHealthScore,
+            mostFrequentFoods: mostFrequentFoods,
+            caloriesTrend: caloriesTrend,
+            nutritionBreakdown: nutritionBreakdown,
+            weeklyStats: AnalyticsData.WeeklyStats(
+                totalCalories: weeklyCalories,
+                averageCalories: weeklyAverage,
+                healthScoreImprovement: 0 // Could calculate trend
+            )
+        )
+    }
+    
+    private func createCaloriesTrend(from analyses: [FoodAnalysisResponse]) -> [AnalyticsData.CalorieDataPoint] {
+        let groupedByDate = Dictionary(grouping: analyses) { analysis in
+            Calendar.current.startOfDay(for: analysis.analysisDate)
+        }
+        
+        return groupedByDate.map { date, dayAnalyses in
+            let totalCalories = dayAnalyses.reduce(0) { $0 + $1.calories }
+            return AnalyticsData.CalorieDataPoint(date: date, calories: totalCalories)
+        }.sorted { $0.date < $1.date }
+    }
+    
+    private func exportData(analyses: [FoodAnalysisResponse], format: ExportFormat) -> AppResult<Data> {
+        switch format {
+        case .csv:
+            return exportCSV(analyses: analyses)
+        case .json:
+            return exportJSON(analyses: analyses)
+        case .pdf:
+            return .failure(.unknown("PDF export not implemented"))
+        }
+    }
+    
+    private func exportCSV(analyses: [FoodAnalysisResponse]) -> AppResult<Data> {
+        var csv = "Date,Food,Calories,Protein,Fat,Carbs,Health Score\n"
+        
+        for analysis in analyses {
+            let row = "\(analysis.analysisDate.formattedAs("yyyy-MM-dd")),\(analysis.itemName),\(analysis.calories),\(analysis.proteinValue),\(analysis.fatValue),\(analysis.carbsValue),\(analysis.healthScore)\n"
+            csv += row
+        }
+        
+        guard let data = csv.data(using: .utf8) else {
+            return .failure(.storage(.encodingFailed))
+        }
+        
+        return .success(data)
+    }
+    
+    private func exportJSON(analyses: [FoodAnalysisResponse]) -> AppResult<Data> {
+        do {
+            let data = try JSONEncoder().encode(analyses)
+            return .success(data)
+        } catch {
+            return .failure(.storage(.encodingFailed))
         }
     }
 }

@@ -7,7 +7,7 @@ protocol GoalsRepositoryProtocol {
     func getCurrentGoals() -> AppResult<NutritionGoals?>
     func updateProgress(for date: Date, analysis: FoodAnalysisResponse) -> AppResult<Void>
     func getDailyProgress(for date: Date) -> AppResult<DailyProgress>
-    func getWeeklyProgress() -> AppResult<WeeklyProgress>
+    func getWeeklyProgress(for date: Date) -> AppResult<WeeklyProgress>
     func getMonthlyProgress() -> AppResult<MonthlyProgress>
     func getAchievements() -> AppResult<[Achievement]>
     func generateGoalRecommendations(userProfile: UserProfile) -> AppResult<GoalRecommendations>
@@ -50,9 +50,12 @@ final class GoalsRepository: GoalsRepositoryProtocol {
     // MARK: - Goals Management
     func saveGoals(_ goals: NutritionGoals) -> AppResult<Void> {
         do {
-            let data = try JSONEncoder().encode(goals)
+            var updatedGoals = goals
+            updatedGoals.updatedAt = Date()
+            
+            let data = try JSONEncoder().encode(updatedGoals)
             userDefaults.set(data, forKey: goalsKey)
-            goalsSubject.send(goals)
+            goalsSubject.send(updatedGoals)
             
             // Check for new achievements
             checkGoalSettingAchievements()
@@ -108,10 +111,9 @@ final class GoalsRepository: GoalsRepositoryProtocol {
         return .success(progress)
     }
     
-    func getWeeklyProgress() -> AppResult<WeeklyProgress> {
+    func getWeeklyProgress(for date: Date) -> AppResult<WeeklyProgress> {
         let calendar = Calendar.current
-        let now = Date()
-        let weekStart = calendar.dateInterval(of: .weekOfYear, for: now)?.start ?? now
+        let weekStart = calendar.dateInterval(of: .weekOfYear, for: date)?.start ?? date
         
         var weeklyProgress = WeeklyProgress(
             weekStart: weekStart,
@@ -125,8 +127,8 @@ final class GoalsRepository: GoalsRepositoryProtocol {
         )
         
         for i in 0..<7 {
-            if let date = calendar.date(byAdding: .day, value: i, to: weekStart) {
-                let dateKey = formatDateKey(date)
+            if let currentDate = calendar.date(byAdding: .day, value: i, to: weekStart) {
+                let dateKey = formatDateKey(currentDate)
                 let dailyProgress = loadDailyProgress(for: dateKey)
                 weeklyProgress.dailyProgresses.append(dailyProgress)
                 weeklyProgress.totalCalories += dailyProgress.totalCalories
@@ -173,7 +175,8 @@ final class GoalsRepository: GoalsRepositoryProtocol {
         for weekOffset in 0..<5 { // Max 5 weeks in a month
             if let weekStart = calendar.date(byAdding: .weekOfYear, value: weekOffset, to: monthStart),
                weekStart < now {
-                switch getWeeklyProgress() {
+                // Use the corrected method signature
+                switch getWeeklyProgress(for: weekStart) {
                 case .success(let weekly):
                     monthlyProgress.weeklyProgresses.append(weekly)
                     monthlyProgress.totalCalories += weekly.totalCalories
@@ -258,6 +261,38 @@ final class GoalsRepository: GoalsRepositoryProtocol {
         return .success(recommendations)
     }
     
+    // MARK: - Enhanced Achievement System
+    func unlockAchievement(_ achievementId: String) -> AppResult<Achievement?> {
+        guard let achievement = createAchievement(with: achievementId) else {
+            return .success(nil)
+        }
+        
+        var achievements = achievementsSubject.value
+        if !achievements.contains(where: { $0.id == achievementId }) {
+            achievements.append(achievement)
+            saveAchievements(achievements)
+            return .success(achievement)
+        }
+        
+        return .success(nil)
+    }
+    
+    func getAchievementProgress() -> AppResult<AchievementProgress> {
+        let achievements = achievementsSubject.value
+        let totalPoints = achievements.reduce(0) { $0 + $1.points }
+        let unlockedCount = achievements.filter { $0.isUnlocked }.count
+        
+        let progress = AchievementProgress(
+            totalAchievements: achievements.count,
+            unlockedAchievements: unlockedCount,
+            totalPoints: totalPoints,
+            currentStreak: calculateCurrentStreak(),
+            level: calculateUserLevel(points: totalPoints)
+        )
+        
+        return .success(progress)
+    }
+    
     // MARK: - Private Methods
     private func loadGoalsFromStorage() {
         guard let data = userDefaults.data(forKey: goalsKey),
@@ -310,14 +345,17 @@ final class GoalsRepository: GoalsRepositoryProtocol {
     
     private func calculateBMR(_ profile: UserProfile) -> Double {
         // Mifflin-St Jeor Equation
-        if profile.gender == .male {
-            return 10 * Double(profile.weight) + 6.25 * Double(profile.height) - 5 * Double(profile.age) + 5
-        } else {
-            return 10 * Double(profile.weight) + 6.25 * Double(profile.height) - 5 * Double(profile.age) - 161
+        let baseValue = 10 * Double(profile.weight) + 6.25 * Double(profile.height) - 5 * Double(profile.age)
+        
+        switch profile.gender {
+        case .male:
+            return baseValue + 5
+        case .female:
+            return baseValue - 161
         }
     }
     
-    private func generateExplanation(for goal: UserProfile.Goal, calories: Int) -> String {
+    private func generateExplanation(for goal: NutritionGoals.Goal.GoalType, calories: Int) -> String {
         switch goal {
         case .weightLoss:
             return "This calorie target creates a sustainable deficit to help you lose weight while preserving muscle mass. Higher protein helps maintain metabolism."
@@ -332,7 +370,7 @@ final class GoalsRepository: GoalsRepositoryProtocol {
         }
     }
     
-    private func generateTips(for goal: UserProfile.Goal) -> [String] {
+    private func generateTips(for goal: NutritionGoals.Goal.GoalType) -> [String] {
         switch goal {
         case .weightLoss:
             return [
@@ -401,6 +439,11 @@ final class GoalsRepository: GoalsRepositoryProtocol {
         return streak
     }
     
+    private func calculateUserLevel(points: Int) -> Int {
+        // Level system: 100 points per level
+        return max(1, points / 100 + 1)
+    }
+    
     private func checkGoalSettingAchievements() {
         var achievements = achievementsSubject.value
         let firstGoalAchievement = Achievement(
@@ -410,7 +453,8 @@ final class GoalsRepository: GoalsRepositoryProtocol {
             icon: "target",
             category: .goals,
             unlockedAt: Date(),
-            isUnlocked: true
+            isUnlocked: true,
+            points: 50
         )
         
         if !achievements.contains(where: { $0.id == firstGoalAchievement.id }) {
@@ -421,6 +465,7 @@ final class GoalsRepository: GoalsRepositoryProtocol {
     
     private func checkProgressAchievements(_ progress: DailyProgress) {
         var achievements = achievementsSubject.value
+        var newAchievements: [Achievement] = []
         
         // First analysis achievement
         if progress.analyses.count == 1 && !achievements.contains(where: { $0.id == "first_analysis" }) {
@@ -431,42 +476,149 @@ final class GoalsRepository: GoalsRepositoryProtocol {
                 icon: "camera.fill",
                 category: .progress,
                 unlockedAt: Date(),
-                isUnlocked: true
+                isUnlocked: true,
+                points: 25
             )
-            achievements.append(achievement)
+            newAchievements.append(achievement)
         }
         
         // Daily goal achievement
-        if progress.calorieProgress >= 0.9 && progress.calorieProgress <= 1.1 &&
-           !achievements.contains(where: { $0.id == "daily_goal_met" }) {
+        if progress.isGoalMet && !achievements.contains(where: { $0.id == "daily_goal_met" }) {
             let achievement = Achievement(
                 id: "daily_goal_met",
                 title: "On Target",
-                description: "Meet your daily calorie goal",
+                description: "Meet your daily nutrition goals",
                 icon: "checkmark.circle.fill",
                 category: .progress,
                 unlockedAt: Date(),
-                isUnlocked: true
+                isUnlocked: true,
+                points: 100
             )
-            achievements.append(achievement)
+            newAchievements.append(achievement)
+        }
+        
+        // Multiple meals in a day
+        if progress.analyses.count >= 3 && !achievements.contains(where: { $0.id == "three_meals_day" }) {
+            let achievement = Achievement(
+                id: "three_meals_day",
+                title: "Full Day",
+                description: "Track 3 or more meals in a single day",
+                icon: "fork.knife",
+                category: .analysis,
+                unlockedAt: Date(),
+                isUnlocked: true,
+                points: 75
+            )
+            newAchievements.append(achievement)
         }
         
         // Streak achievements
         let streak = calculateCurrentStreak()
+        
+        if streak >= 3 && !achievements.contains(where: { $0.id == "three_day_streak" }) {
+            newAchievements.append(Achievement(
+                id: "three_day_streak",
+                title: "Getting Started",
+                description: "Track nutrition for 3 days in a row",
+                icon: "flame.fill",
+                category: .streaks,
+                unlockedAt: Date(),
+                isUnlocked: true,
+                points: 150
+            ))
+        }
+        
         if streak >= 7 && !achievements.contains(where: { $0.id == "week_streak" }) {
-            let achievement = Achievement(
+            newAchievements.append(Achievement(
                 id: "week_streak",
                 title: "Week Warrior",
                 description: "Track nutrition for 7 days in a row",
                 icon: "flame.fill",
                 category: .streaks,
                 unlockedAt: Date(),
-                isUnlocked: true
-            )
-            achievements.append(achievement)
+                isUnlocked: true,
+                points: 300
+            ))
         }
         
-        saveAchievements(achievements)
+        if streak >= 30 && !achievements.contains(where: { $0.id == "month_streak" }) {
+            newAchievements.append(Achievement(
+                id: "month_streak",
+                title: "Monthly Master",
+                description: "Track nutrition for 30 days in a row",
+                icon: "flame.fill",
+                category: .streaks,
+                unlockedAt: Date(),
+                isUnlocked: true,
+                points: 1000
+            ))
+        }
+        
+        // High protein meal achievement
+        if let lastAnalysis = progress.analyses.last,
+           lastAnalysis.isHighProtein && !achievements.contains(where: { $0.id == "high_protein_meal" }) {
+            newAchievements.append(Achievement(
+                id: "high_protein_meal",
+                title: "Protein Power",
+                description: "Analyze a meal with 20g+ protein",
+                icon: "bolt.fill",
+                category: .nutrition,
+                unlockedAt: Date(),
+                isUnlocked: true,
+                points: 50
+            ))
+        }
+        
+        // Balanced meal achievement
+        if let lastAnalysis = progress.analyses.last,
+           lastAnalysis.isBalanced && !achievements.contains(where: { $0.id == "balanced_meal" }) {
+            newAchievements.append(Achievement(
+                id: "balanced_meal",
+                title: "Perfect Balance",
+                description: "Analyze a well-balanced meal",
+                icon: "scale.3d",
+                category: .nutrition,
+                unlockedAt: Date(),
+                isUnlocked: true,
+                points: 75
+            ))
+        }
+        
+        // Add new achievements and save
+        if !newAchievements.isEmpty {
+            achievements.append(contentsOf: newAchievements)
+            saveAchievements(achievements)
+        }
+    }
+    
+    private func createAchievement(with id: String) -> Achievement? {
+        // Factory method for creating achievements
+        switch id {
+        case "nutritionist":
+            return Achievement(
+                id: "nutritionist",
+                title: "Nutritionist",
+                description: "Analyze 100 meals",
+                icon: "graduationcap.fill",
+                category: .analysis,
+                unlockedAt: Date(),
+                isUnlocked: true,
+                points: 500
+            )
+        case "health_guru":
+            return Achievement(
+                id: "health_guru",
+                title: "Health Guru",
+                description: "Maintain a 30-day streak with excellent nutrition",
+                icon: "crown.fill",
+                category: .streaks,
+                unlockedAt: Date(),
+                isUnlocked: true,
+                points: 2000
+            )
+        default:
+            return nil
+        }
     }
     
     private func saveAchievements(_ achievements: [Achievement]) {
@@ -475,138 +627,28 @@ final class GoalsRepository: GoalsRepositoryProtocol {
             userDefaults.set(data, forKey: achievementsKey)
             achievementsSubject.send(achievements)
         } catch {
-            // Handle encoding error
+            // Handle encoding error silently for now
+            print("Failed to save achievements: \(error)")
         }
     }
 }
 
 // MARK: - Supporting Types
-struct DailyProgress: Codable {
-    var date: Date
-    var analyses: [FoodAnalysisResponse]
-    var totalCalories: Int
-    var totalProtein: Double
-    var totalFat: Double
-    var totalCarbs: Double
-    var calorieProgress: Double
-    var proteinProgress: Double
-    var fatProgress: Double
-    var carbsProgress: Double
-    var lastUpdated: Date
+struct AchievementProgress: Codable {
+    let totalAchievements: Int
+    let unlockedAchievements: Int
+    let totalPoints: Int
+    let currentStreak: Int
+    let level: Int
     
-    static let empty = DailyProgress(
-        date: Date(),
-        analyses: [],
-        totalCalories: 0,
-        totalProtein: 0,
-        totalFat: 0,
-        totalCarbs: 0,
-        calorieProgress: 0,
-        proteinProgress: 0,
-        fatProgress: 0,
-        carbsProgress: 0,
-        lastUpdated: Date()
-    )
-    
-    var isGoalMet: Bool {
-        return calorieProgress >= 0.9 && calorieProgress <= 1.1 &&
-               proteinProgress >= 0.9 && fatProgress >= 0.9 && carbsProgress >= 0.9
-    }
-}
-
-struct WeeklyProgress: Codable {
-    let weekStart: Date
-    var dailyProgresses: [DailyProgress]
-    var totalCalories: Int
-    var totalProtein: Double
-    var totalFat: Double
-    var totalCarbs: Double
-    var averageCalories: Int
-    var goalCompletionRate: Double
-}
-
-struct MonthlyProgress: Codable {
-    let monthStart: Date
-    var weeklyProgresses: [WeeklyProgress]
-    var totalCalories: Int
-    var totalProtein: Double
-    var totalFat: Double
-    var totalCarbs: Double
-    var averageCalories: Int
-    var goalCompletionRate: Double
-    var streak: Int
-}
-
-struct Achievement: Codable, Identifiable {
-    let id: String
-    let title: String
-    let description: String
-    let icon: String
-    let category: AchievementCategory
-    let unlockedAt: Date
-    let isUnlocked: Bool
-    
-    enum AchievementCategory: String, Codable, CaseIterable {
-        case goals = "Goals"
-        case progress = "Progress"
-        case streaks = "Streaks"
-        case analysis = "Analysis"
-        case social = "Social"
-    }
-}
-
-struct UserProfile: Codable {
-    let age: Int
-    let weight: Int // kg
-    let height: Int // cm
-    let gender: Gender
-    let activityLevel: ActivityLevel
-    let goal: Goal
-    
-    enum Gender: String, Codable {
-        case male, female
+    var completionPercentage: Double {
+        guard totalAchievements > 0 else { return 0 }
+        return Double(unlockedAchievements) / Double(totalAchievements) * 100
     }
     
-    enum ActivityLevel: String, Codable, CaseIterable {
-        case sedentary, lightly, moderately, very, extremely
-        
-        var multiplier: Double {
-            switch self {
-            case .sedentary: return 1.2
-            case .lightly: return 1.375
-            case .moderately: return 1.55
-            case .very: return 1.725
-            case .extremely: return 1.9
-            }
-        }
+    var pointsToNextLevel: Int {
+        let currentLevelPoints = (level - 1) * 100
+        let nextLevelPoints = level * 100
+        return nextLevelPoints - totalPoints
     }
-    
-    enum Goal: String, Codable, CaseIterable {
-        case weightLoss = "weight_loss"
-        case weightGain = "weight_gain"
-        case maintenance = "maintenance"
-        case muscle = "muscle_gain"
-        case endurance = "endurance"
-    }
-}
-
-struct GoalRecommendations: Codable {
-    let dailyCalorieGoal: Int
-    let proteinGoal: Double
-    let fatGoal: Double
-    let carbsGoal: Double
-    let fiberGoal: Double
-    let explanation: String
-    let tips: [String]
-    
-    // Additional properties for RecommendationsView
-    let bmr: Int
-    let tdee: Int
-    let goalType: UserProfile.Goal
-    
-    // Computed properties for UI
-    var calories: Int { dailyCalorieGoal }
-    var protein: Double { proteinGoal }
-    var carbs: Double { carbsGoal }
-    var fat: Double { fatGoal }
 }
